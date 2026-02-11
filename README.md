@@ -1,6 +1,6 @@
 # Cobalt Strike Linux Beacon
 
-A proof-of-concept custom Linux Beacon that communicates with the Cobalt Strike teamserver using the HTTP/S protocol.
+A proof-of-concept custom Linux Beacon written in C that communicates with the Cobalt Strike teamserver using the HTTP/S protocol.
 
 The goal of this project isn't to be a fully featured implant, nor is it limited to just Linux. It is to show that it is possible to make custom implants for Cobalt Strike for any platform. The only requirement is communicating with the teamserver correctly.
 
@@ -27,6 +27,11 @@ You can view the setup steps in the [SETUP](SETUP.md) file.
 
 ## Special Thanks
 Thank you to [Kyle Avery](https://x.com/kyleavery) for your help with integrating BOF execution and testing out the implant.
+
+## Future goals
+* Add support for custom C2 profiles
+* Add TCP listener + connect functionality
+* Continue fixing bugs
 
 ## Resources
 - Cobalt Strike (wow!)
