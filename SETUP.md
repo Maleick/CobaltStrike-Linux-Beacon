@@ -46,3 +46,20 @@ After completing steps 1, 2, and 3 (installing dependencies & preparing publicke
     * 0 = use HTTP, 1 = use HTTPS
 
 7. Then run `make`.
+
+### Running Linux BOFs
+There are 2 sample BOFs that are provided with this project (Thank you TrustedSec and Outflank). Their commands are `linux_id` and `linux_cat <file>`
+
+To use them, first run `./build.sh` in the `sample_linux_bofs/` directory to build them.
+
+Then load the `execute_linux_bof.cna` Aggressor Script.
+
+Now you can use test them out!
+
+When developing your own BOFs,
+If your custom BOF use a separate Aggressor Script and the functionality is not in `execute_linux_bof.cna`, you must add this include into it:
+```
+include("/path/to/CobaltStrike-Linux-Beacon/CustomBeacon.cna");
+```
+
+This is so that you will get access to the `beacon_inline_execute_linux` function to actually execute it.
