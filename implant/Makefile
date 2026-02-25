@@ -19,6 +19,7 @@ BIN_DIR            = bin
 
 # Target binary
 TARGET = $(BIN_DIR)/$(OUTPUT)
+TEST_DIR = tests
 
 # Source files
 SOURCES = \
@@ -57,4 +58,10 @@ clean:
 debug: CFLAGS += -g -DDEBUG
 debug: clean all
 
-.PHONY: all clean debug directories
+test-quick:
+	@bash $(TEST_DIR)/run_regression.sh --mode quick
+
+test-full:
+	@bash $(TEST_DIR)/run_regression.sh --mode full
+
+.PHONY: all clean debug directories test-quick test-full
