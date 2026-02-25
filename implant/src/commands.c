@@ -668,6 +668,12 @@ int commands_execute(const uint8_t *task_data, size_t task_len, uint8_t **output
 
 int commands_parse_tasks(const uint8_t *task_buffer, size_t task_len)
 {    
+    if (!task_buffer || task_len == 0)
+    {
+        ERROR_PRINT("[!] Empty task buffer received\n");
+        return -1;
+    }
+
     /*
     The full task data is sent to this command
 
@@ -746,7 +752,7 @@ int commands_parse_tasks(const uint8_t *task_buffer, size_t task_len)
 		{
             DEBUG_PRINT("[!] Invalid task length: %u (+%zu header) (only %zu bytes remaining)\n",
                    data_length, task_header_len, task_len - offset);
-            break;
+            return -1;
         }
         
         // Build full task for this singular command
@@ -755,7 +761,7 @@ int commands_parse_tasks(const uint8_t *task_buffer, size_t task_len)
         if (!full_task)
         {
             DEBUG_PRINT("[!] Failed to allocate memory for task execution buffer\n");
-            break;
+            return -1;
         }
         
         uint32_t cmd_be = htonl(command_id);
