@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "generated_on": "2026-02-25",
+  "default_assertion_mode": "semantic",
+  "fixtures": [
+    {
+      "fixture_id": "meta-default-http-001",
+      "version": "v1",
+      "suite": "protocol",
+      "category": "metadata",
+      "path": "fixtures/protocol/v1/metadata/default-http.json",
+      "assertion_mode": "semantic",
+      "requirements": ["REL-01"],
+      "modes": ["quick", "full"],
+      "expected": "semantic_match"
+    },
+    {
+      "fixture_id": "task-malformed-short-header-001",
+      "version": "v1",
+      "suite": "parser",
+      "category": "malformed_task",
+      "path": "fixtures/protocol/v1/tasks/malformed-short-header.bin",
+      "assertion_mode": "semantic",
+      "requirements": ["REL-01", "REL-02"],
+      "modes": ["quick", "full"],
+      "expected": "reject_continue"
+    }
+  ]
+}
