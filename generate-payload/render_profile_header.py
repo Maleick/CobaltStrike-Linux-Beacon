@@ -15,6 +15,14 @@ def _c_escape(text: str) -> str:
     return text.replace("\\", "\\\\").replace('"', '\\"')
 
 
+def _render_sorted_headers(profile: dict) -> List[str]:
+    rendered_headers: List[str] = []
+    for key in sorted(profile["http_headers"].keys()):
+        value = profile["http_headers"][key]
+        rendered_headers.append(f"{key}: {value}")
+    return rendered_headers
+
+
 def _render_header(profile: dict) -> str:
     header_lines: List[str] = []
     header_lines.append("#ifndef PROFILE_CONFIG_H")
@@ -30,10 +38,7 @@ def _render_header(profile: dict) -> str:
     header_lines.append(f"#define PROFILE_HTTP_POST_URI \"{_c_escape(profile['http_post_uri'])}\"")
     header_lines.append(f"#define PROFILE_USER_AGENT \"{_c_escape(profile['user_agent'])}\"")
 
-    rendered_headers: List[str] = []
-    for key in sorted(profile["http_headers"].keys()):
-        value = profile["http_headers"][key]
-        rendered_headers.append(f"{key}: {value}")
+    rendered_headers = _render_sorted_headers(profile)
 
     header_lines.append(f"#define PROFILE_HEADER_COUNT {len(rendered_headers)}")
     for idx, header in enumerate(rendered_headers):
