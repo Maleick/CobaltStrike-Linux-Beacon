@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "fixture_set": "v1-smoke",
+  "callbacks": {
+    "sleep": "CALLBACK_OUTPUT",
+    "pwd": "CALLBACK_PWD",
+    "cd": "CALLBACK_OUTPUT"
+  },
+  "callback_codes": {
+    "CALLBACK_OUTPUT": 0,
+    "CALLBACK_PWD": 19,
+    "CALLBACK_ERROR": 31
+  }
+}

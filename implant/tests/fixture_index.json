@@ -57,6 +57,39 @@
       "requirements": ["REL-02"],
       "modes": ["quick", "full"],
       "expected": "reject_continue"
+    },
+    {
+      "fixture_id": "smoke-sleep-task-001",
+      "version": "v1",
+      "suite": "smoke",
+      "category": "command_smoke",
+      "path": "fixtures/protocol/v1/smoke/sleep-task.json",
+      "assertion_mode": "semantic",
+      "requirements": ["REL-01"],
+      "modes": ["quick", "full"],
+      "expected": "callback_match"
+    },
+    {
+      "fixture_id": "smoke-pwd-task-001",
+      "version": "v1",
+      "suite": "smoke",
+      "category": "command_smoke",
+      "path": "fixtures/protocol/v1/smoke/pwd-task.json",
+      "assertion_mode": "semantic",
+      "requirements": ["REL-01"],
+      "modes": ["quick", "full"],
+      "expected": "callback_match"
+    },
+    {
+      "fixture_id": "smoke-cd-task-001",
+      "version": "v1",
+      "suite": "smoke",
+      "category": "command_smoke",
+      "path": "fixtures/protocol/v1/smoke/cd-task.json",
+      "assertion_mode": "semantic",
+      "requirements": ["REL-01"],
+      "modes": ["quick", "full"],
+      "expected": "callback_match"
     }
   ]
 }

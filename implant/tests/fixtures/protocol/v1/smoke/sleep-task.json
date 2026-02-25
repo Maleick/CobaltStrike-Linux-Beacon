@@ -1,0 +1,13 @@
+{
+  "fixture_id": "smoke-sleep-task-001",
+  "command": "sleep",
+  "command_id": 4,
+  "args": {
+    "sleep_ms": 60000,
+    "jitter_percent": 0
+  },
+  "semantic_expectation": {
+    "result": "accepted",
+    "callback": "CALLBACK_OUTPUT"
+  }
+}
