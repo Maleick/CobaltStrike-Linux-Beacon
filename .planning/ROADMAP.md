@@ -31,9 +31,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: Add protocol fixture corpus and test harness scaffolding
-- [ ] 01-02: Add parser hardening tests for malformed/edge-case task buffers
-- [ ] 01-03: Add baseline compatibility smoke tests for current command flows
+- [ ] 01-01-PLAN.md — Establish fixture corpus, index, and regression harness entrypoints
+- [ ] 01-02-PLAN.md — Add malformed-task parser hardening test matrix and safeguards
+- [ ] 01-03-PLAN.md — Add baseline protocol/command smoke compatibility regression suite
 
 ### Phase 2: HTTP/S Profile Abstraction
 **Goal**: Operators can build profile-specific HTTP/S beacons without editing tracked source files.
