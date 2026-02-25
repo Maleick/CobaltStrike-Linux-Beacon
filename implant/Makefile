@@ -19,7 +19,8 @@ BIN_DIR            = bin
 
 # Target binary
 TARGET = $(BIN_DIR)/$(OUTPUT)
-TEST_DIR = tests
+MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+TEST_DIR := $(MAKEFILE_DIR)tests
 
 # Source files
 SOURCES = \

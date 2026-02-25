@@ -29,4 +29,8 @@ if [[ "$MODE" != "quick" && "$MODE" != "full" ]]; then
   exit 2
 fi
 
-exec "$PYTHON_BIN" "$SCRIPT_DIR/run_regression.py" --mode "$MODE" "${ARGS[@]}"
+if ((${#ARGS[@]})); then
+  exec "$PYTHON_BIN" "$SCRIPT_DIR/run_regression.py" --mode "$MODE" "${ARGS[@]}"
+fi
+
+exec "$PYTHON_BIN" "$SCRIPT_DIR/run_regression.py" --mode "$MODE"
