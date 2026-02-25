@@ -57,6 +57,7 @@ Each task was committed atomically:
 1. **Task 1: Create versioned protocol fixture corpus and index** - `f3a39b0` (feat)
 2. **Task 2: Implement deterministic quick/full regression runner** - `71245a2` (feat)
 3. **Task 3: Wire harness into build workflow** - `e169f85` (feat)
+4. **Post-task stabilization: wrapper/make invocation fixes** - `f4cd601` (fix)
 
 ## Files Created/Modified
 - `implant/tests/README.md` - Documents fixture layout and governance.
@@ -73,7 +74,28 @@ Each task was committed atomically:
 
 ## Deviations from Plan
 
-None - plan executed exactly as written.
+### Auto-fixed Issues
+
+**1. [Rule 1 - Bug] Empty-args wrapper failure under `set -u`**
+- **Found during:** Final wrapper validation (`bash implant/tests/run_regression.sh --mode full`)
+- **Issue:** `run_regression.sh` raised `unbound variable` when no extra args were provided.
+- **Fix:** Added explicit empty-args branch before `exec` argument forwarding.
+- **Files modified:** `implant/tests/run_regression.sh`
+- **Verification:** `bash implant/tests/run_regression.sh --mode full` now passes.
+- **Committed in:** `f4cd601`
+
+**2. [Rule 3 - Blocking] Make test targets failed from repo root**
+- **Found during:** Final make-target validation
+- **Issue:** `make -f implant/Makefile test-full` resolved `tests/` relative to current directory, not Makefile location.
+- **Fix:** Compute `MAKEFILE_DIR` and set `TEST_DIR` from it.
+- **Files modified:** `implant/Makefile`
+- **Verification:** `make -f implant/Makefile test-quick` and `test-full` pass from repo root.
+- **Committed in:** `f4cd601`
+
+---
+
+**Total deviations:** 2 auto-fixed (1 bug, 1 blocking)
+**Impact on plan:** Tightened harness reliability and invocation portability without expanding phase scope.
 
 ## Issues Encountered
 
