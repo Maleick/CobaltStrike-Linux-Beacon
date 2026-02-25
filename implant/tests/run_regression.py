@@ -16,6 +16,7 @@ SUITE_MODULES = {
     "parser": SCRIPT_DIR / "test_task_parser.py",
     "protocol": SCRIPT_DIR / "test_protocol_roundtrip.py",
     "smoke": SCRIPT_DIR / "test_command_smoke.py",
+    "profile": SCRIPT_DIR / "test_profile_matrix.py",
 }
 
 

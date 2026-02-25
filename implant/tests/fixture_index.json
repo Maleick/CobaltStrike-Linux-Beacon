@@ -90,6 +90,28 @@
       "requirements": ["REL-01"],
       "modes": ["quick", "full"],
       "expected": "callback_match"
+    },
+    {
+      "fixture_id": "profile-default-metadata-001",
+      "version": "v1",
+      "suite": "profile",
+      "category": "profile_compatibility",
+      "path": "fixtures/protocol/v1/profile/default-metadata.json",
+      "assertion_mode": "semantic",
+      "requirements": ["C2P-02", "C2P-03"],
+      "modes": ["quick", "full"],
+      "expected": "semantic_match"
+    },
+    {
+      "fixture_id": "profile-nondefault-metadata-001",
+      "version": "v1",
+      "suite": "profile",
+      "category": "profile_compatibility",
+      "path": "fixtures/protocol/v1/profile/nondefault-metadata.json",
+      "assertion_mode": "semantic",
+      "requirements": ["C2P-02", "C2P-03"],
+      "modes": ["quick", "full"],
+      "expected": "semantic_match"
     }
   ]
 }
