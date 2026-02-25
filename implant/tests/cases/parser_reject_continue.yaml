@@ -1,0 +1,28 @@
+version: v1
+case_set: reject_continue
+owner_requirement: REL-02
+cases:
+  - fixture_id: task-malformed-short-header-001
+    file: fixtures/protocol/v1/tasks/malformed-short-header.bin
+    expected:
+      outcome: reject
+      reject_continue: true
+      error_class: layout_invalid
+  - fixture_id: task-malformed-empty-payload-001
+    file: fixtures/protocol/v1/tasks/malformed-empty-payload.bin
+    expected:
+      outcome: reject
+      reject_continue: true
+      error_class: layout_invalid
+  - fixture_id: task-malformed-invalid-header-001
+    file: fixtures/protocol/v1/tasks/malformed-invalid-header.bin
+    expected:
+      outcome: reject
+      reject_continue: true
+      error_class: layout_invalid
+  - fixture_id: task-malformed-oversized-length-001
+    file: fixtures/protocol/v1/tasks/malformed-oversized-length.bin
+    expected:
+      outcome: reject
+      reject_continue: true
+      error_class: layout_invalid
