@@ -24,12 +24,19 @@ int profile_load(void);
 /* Return the currently loaded profile (lazy-loads on first access). */
 const profile_config_t *profile_get(void);
 
+/* Metadata accessors for diagnostics and fixture contracts. */
+const char *profile_get_id(void);
+const char *profile_get_schema_version(void);
+
+/* Runtime HTTP/S transport accessors. */
 const char *profile_get_server(void);
 int profile_get_port(void);
 int profile_get_use_https(void);
 const char *profile_get_http_get_uri(void);
 const char *profile_get_http_post_uri(void);
 const char *profile_get_user_agent(void);
+
+/* Optional header accessors in stable deterministic order. */
 size_t profile_get_header_count(void);
 const char *profile_get_header(size_t index);
 

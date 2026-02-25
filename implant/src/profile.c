@@ -122,6 +122,16 @@ const profile_config_t *profile_get(void)
     return &g_profile;
 }
 
+const char *profile_get_id(void)
+{
+    return profile_get()->profile_id;
+}
+
+const char *profile_get_schema_version(void)
+{
+    return profile_get()->schema_version;
+}
+
 const char *profile_get_server(void)
 {
     return profile_get()->server;
