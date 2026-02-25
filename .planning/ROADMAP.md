@@ -13,7 +13,7 @@ This roadmap evolves the existing Linux beacon from a working proof-of-concept i
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Baseline Validation Harness** - Establish repeatable protocol/parser regression safety. (completed 2026-02-25)
-- [ ] **Phase 2: HTTP/S Profile Abstraction** - Externalize profile configuration while preserving compatibility.
+- [x] **Phase 2: HTTP/S Profile Abstraction** - Externalize profile configuration while preserving compatibility. (completed 2026-02-25)
 - [ ] **Phase 3: Reverse TCP Transport Mode** - Add TCP beacon transport and generation-mode selection.
 - [ ] **Phase 4: Security and Build Hygiene** - Harden TLS defaults and eliminate tracked-source mutation workflow.
 - [ ] **Phase 5: CI and Release Readiness** - Automate build/test gating and milestone acceptance checks.
@@ -102,7 +102,7 @@ Phases execute in numeric order: 2 → 2.1 → 2.2 → 3 → 3.1 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Baseline Validation Harness | 0/3 | Complete    | 2026-02-25 |
-| 2. HTTP/S Profile Abstraction | 0/3 | Not started | - |
+| 2. HTTP/S Profile Abstraction | 0/3 | Complete    | 2026-02-25 |
 | 3. Reverse TCP Transport Mode | 0/3 | Not started | - |
 | 4. Security and Build Hygiene | 0/3 | Not started | - |
 | 5. CI and Release Readiness | 0/2 | Not started | - |
