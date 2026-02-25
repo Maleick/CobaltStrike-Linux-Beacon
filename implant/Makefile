@@ -5,6 +5,7 @@ OUTPUT ?= beacon
 CC = gcc
 CFLAGS = -Wall -Wextra -O2 \
          -I./headers \
+         -I./generated \
          -I./elfloader/elfloader-headers
 
 LDFLAGS = -lssl -lcrypto -lcurl
@@ -38,6 +39,7 @@ directories:
 	@mkdir -p $(BIN_DIR)
 	@mkdir -p $(OBJ_DIR)/$(SRC_DIR)
 	@mkdir -p $(OBJ_DIR)/$(ELFLOADER_SRC_DIR)
+	@mkdir -p generated
 
 # Link the final binary
 $(TARGET): $(OBJECTS)
