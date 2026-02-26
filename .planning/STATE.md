@@ -1,51 +1,54 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: unknown
-stopped_at: Phase 2 plans ready
-last_updated: "2026-02-25T22:41:13.012Z"
+milestone: v2.0
+milestone_name: macOS ARM64 Beacon
+status: defining_requirements
+stopped_at: Milestone started — defining requirements
+last_updated: "2026-02-26T17:11:15Z"
 progress:
-  total_phases: 2
-  completed_phases: 2
-  total_plans: 6
-  completed_plans: 6
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-25)
+See: .planning/PROJECT.md (updated 2026-02-26)
 
-**Core value:** Operators can deploy a Linux beacon that remains Cobalt Strike-compatible while being safely extensible for new transports and profile behaviors.
-**Current focus:** Phase 1: Baseline Validation Harness
+**Core value:** Operators can deploy a Cobalt Strike-compatible beacon on Linux x64 and macOS ARM64 hosts, with a safe and extensible generation workflow for each platform.
+**Current focus:** v2.0 macOS ARM64 Beacon — defining requirements
 
 ## Current Position
 
-Phase: 1 of 5 (Baseline Validation Harness)
-Plan: 0 of 3 in current phase
-Status: Ready to plan
-Last activity: 2026-02-25 — Initialized PROJECT/config/requirements/roadmap/state artifacts
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-02-26 — Milestone v2.0 macOS ARM64 started
 
 Progress: [░░░░░░░░░░] 0%
 
+## v1.0 Linux Stream (Paused)
+
+Phases 1–2 complete. Phases 3–5 paused pending v2.0 bootstrap.
+Resume with: `/gsd:resume-work` (see `.planning/phases/03-reverse-tcp-transport/.continue-here.md`)
+
+| Phase | Status | Plans |
+|-------|--------|-------|
+| 1. Baseline Validation Harness | ✓ Complete | 3/3 |
+| 2. HTTP/S Profile Abstraction | ✓ Complete | 3/3 |
+| 3. Reverse TCP Transport | ○ Paused | 0/3 |
+| 4. Security and Build Hygiene | ○ Not started | 0/3 |
+| 5. CI and Release Readiness | ○ Not started | 0/2 |
+
 ## Performance Metrics
 
-**Velocity:**
+**Velocity (v2.0 stream):**
 - Total plans completed: 0
 - Average duration: 0 min
 - Total execution time: 0.0 hours
-
-**By Phase:**
-
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| - | - | - | - |
-
-**Recent Trend:**
-- Last 5 plans: none
-- Trend: Stable
 
 *Updated after each plan completion*
 
@@ -56,8 +59,12 @@ Progress: [░░░░░░░░░░] 0%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- [Init] Use brownfield baseline from mapped existing capabilities
-- [Init] Prioritize regression safety before transport/profile expansion
+- [v2.0 Init] macOS ARM64 as new parallel milestone — separate branch, separate implant-macos/ tree
+- [v2.0 Init] ARM64 only (M1–M4) — x86_64 macOS excluded from v2.0 scope
+- [v2.0 Init] Phased parity — not full command parity in first milestone
+- [v2.0 Init] Internal purple-team validation target — not production/external release
+- [v2.0 Init] macOS-host build first (Clang/native ARM64)
+- [v2.0 Init] branching_strategy: milestone — stream isolation via separate branches
 
 ### Pending Todos
 
@@ -65,10 +72,12 @@ None yet.
 
 ### Blockers/Concerns
 
-None yet.
+- ELFLoader is Linux ELF-specific — macOS Mach-O BOF execution is out of scope for v2.0
+- libcurl + OpenSSL link paths differ on macOS (Homebrew vs System frameworks) — Phase 6 build setup must address this
+- macOS ARM64 code signing constraints — Phase 9 stabilization must address for purple-team deployment
 
 ## Session Continuity
 
-**Last session:** 2026-02-25T22:15:35.560Z
-**Stopped at:** Phase 2 plans ready
-**Resume file:** .planning/phases/02-http-s-profile-abstraction/02-01-PLAN.md
+**Last session:** 2026-02-26T17:11:15Z
+**Stopped at:** Milestone v2.0 started
+**Resume file:** .planning/STATE.md
