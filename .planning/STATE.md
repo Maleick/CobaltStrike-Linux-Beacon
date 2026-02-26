@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: macOS ARM64 Beacon
-status: defining_requirements
-stopped_at: Milestone started — defining requirements
-last_updated: "2026-02-26T17:11:15Z"
+status: ready_to_plan
+stopped_at: Roadmap complete — ready for /gsd:plan-phase 6
+last_updated: "2026-02-26T17:30:00Z"
 progress:
-  total_phases: 0
+  total_phases: 4
   completed_phases: 0
-  total_plans: 0
+  total_plans: 10
   completed_plans: 0
 ---
 
@@ -19,14 +19,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Operators can deploy a Cobalt Strike-compatible beacon on Linux x64 and macOS ARM64 hosts, with a safe and extensible generation workflow for each platform.
-**Current focus:** v2.0 macOS ARM64 Beacon — defining requirements
+**Current focus:** v2.0 macOS ARM64 Beacon — Phase 6: macOS Tree Scaffold and Build System
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-02-26 — Milestone v2.0 macOS ARM64 started
+Phase: 6 of 9 (macOS Tree Scaffold and Build System)
+Plan: 0 of 3 in current phase
+Status: Ready to plan
+Last activity: 2026-02-26 — Requirements and roadmap defined; research complete
 
 Progress: [░░░░░░░░░░] 0%
 
