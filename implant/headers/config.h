@@ -1,7 +1,9 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-// Cobalt Strike Team Server Configuration
+// Cobalt Strike Team Server Configuration (compatibility defaults only).
+// Profile customization should be performed via profile artifacts rendered to
+// implant/generated/profile_config.h during payload generation.
 #define C2_SERVER "192.168.108.130"
 #define C2_PORT 80
 #define C2_USE_HTTPS 0

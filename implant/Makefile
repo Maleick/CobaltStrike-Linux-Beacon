@@ -5,6 +5,7 @@ OUTPUT ?= beacon
 CC = gcc
 CFLAGS = -Wall -Wextra -O2 \
          -I./headers \
+         -I./generated \
          -I./elfloader/elfloader-headers
 
 LDFLAGS = -lssl -lcrypto -lcurl
@@ -19,6 +20,8 @@ BIN_DIR            = bin
 
 # Target binary
 TARGET = $(BIN_DIR)/$(OUTPUT)
+MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+TEST_DIR := $(MAKEFILE_DIR)tests
 
 # Source files
 SOURCES = \
@@ -36,6 +39,7 @@ directories:
 	@mkdir -p $(BIN_DIR)
 	@mkdir -p $(OBJ_DIR)/$(SRC_DIR)
 	@mkdir -p $(OBJ_DIR)/$(ELFLOADER_SRC_DIR)
+	@mkdir -p generated
 
 # Link the final binary
 $(TARGET): $(OBJECTS)
@@ -57,4 +61,10 @@ clean:
 debug: CFLAGS += -g -DDEBUG
 debug: clean all
 
-.PHONY: all clean debug directories
+test-quick:
+	@bash $(TEST_DIR)/run_regression.sh --mode quick
+
+test-full:
+	@bash $(TEST_DIR)/run_regression.sh --mode full
+
+.PHONY: all clean debug directories test-quick test-full

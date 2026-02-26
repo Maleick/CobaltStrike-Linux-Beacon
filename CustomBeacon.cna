@@ -20,7 +20,7 @@ sub genBeaconMenu {
 
 	# Create a dialog. Use &dialog_show to show it. Args in Order: 1. Title of the dialog; 2. A %dictionary mapping row names to default values; 3.A callback function that gets called when the user presses a &dbutton_action button.
 	# $1 is a reference to the dialog. $2 is the button name. $3 is a dictionary that maps each row's name to its value.
-	$dialog = dialog("Custom Beacon Generator", %(listener => "Select Listener: ", Beacon_name => "Beacon_x64"), &genPayload); 
+	$dialog = dialog("Custom Beacon Generator", %(listener => "Select Listener: ", Beacon_name => "Beacon_x64", Profile_path => "../profiles/http/default-profile.json"), &genPayload); 
 	
 	# Adds a description to a &dialog
 	dialog_description($dialog, "Creates a custom Beacon implant\n- Currently only supports HTTP/S listeners");
@@ -30,6 +30,7 @@ sub genBeaconMenu {
 
 	# Adds a text field row to a &dialog
 	drow_text($dialog, "Beacon_name", "Executable Name: "); 
+	drow_text($dialog, "Profile_path", "Profile Path: ");
 	
 	# Adds an action button to a &dialog. When this button is pressed, the dialog closes and its callback is called.
 	dbutton_action($dialog, "Generate");
@@ -52,6 +53,11 @@ sub genPayload {
 	}
 	
 	$filename = $3['Beacon_name']; 
+	$ProfilePath = $3['Profile_path'];
+	if ($ProfilePath eq "")
+	{
+		$ProfilePath = "../profiles/http/default-profile.json";
+	}
 
 	# Listener needs to be selected
 	if ($3['listener'] ismatch "Select Listener: ") {
@@ -88,7 +94,9 @@ sub genPayload {
 	$TargetServer = listener_info($ListenerName, "host");
 	$TargetPort = listener_info($ListenerName, "port");
 	
-	$command = "python3 InsertListenerInfo.py " . $TargetServer . " " . $TargetPort . " " . $HTTPSvalue;
+	# InsertListenerInfo.py runs validate_profile.py + render_profile_header.py
+	# so generation fails fast before make if profile config is invalid.
+	$command = "python3 InsertListenerInfo.py " . $TargetServer . " " . $TargetPort . " " . $HTTPSvalue . " " . $ProfilePath;
 	println($command);
 	$process = exec($command, $null, $GeneratePayloadDirectory);
 	@data = readAll($process);

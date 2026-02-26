@@ -1,0 +1,12 @@
+{
+  "fixture_id": "smoke-cd-task-001",
+  "command": "cd",
+  "command_id": 5,
+  "args": {
+    "path": "/tmp"
+  },
+  "semantic_expectation": {
+    "result": "accepted",
+    "callback": "CALLBACK_OUTPUT"
+  }
+}

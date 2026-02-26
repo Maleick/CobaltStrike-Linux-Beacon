@@ -1,40 +1,96 @@
-import os
-import sys
+#!/usr/bin/env python3
+"""Resolve listener values into a selected profile and render generated config."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
 import subprocess
+import sys
+from typing import Any, Dict
 
-C2_SERVER_string    = "#define C2_SERVER"
-C2_PORT_string      = "#define C2_PORT"
-C2_USE_HTTPS_string = "#define C2_USE_HTTPS"
+from validate_profile import validate_profile
 
-
-def InsertListenerInfo(Target_Server, Target_Port, HTTPS_value):
-
-    # Read original file
-    with open("../implant/headers/config.h", "r") as f:
-        lines = f.readlines()
-
-    # Write modified file
-    with open("../implant/headers/config.tmp", "w") as f:
-        for line in lines:               
-            if C2_SERVER_string in line:
-                f.write(f'{C2_SERVER_string} "{Target_Server}"\n')
-            elif C2_PORT_string in line:
-                f.write(f'{C2_PORT_string} {Target_Port}\n')
-            elif C2_USE_HTTPS_string in line:
-                f.write(f'{C2_USE_HTTPS_string} {HTTPS_value}\n')
-            else:
-                f.write(line)
-
-        print("Inserted listener info into config.h!")
+THIS_DIR = pathlib.Path(__file__).resolve().parent
+REPO_ROOT = THIS_DIR.parent
+DEFAULT_PROFILE = REPO_ROOT / "profiles/http/default-profile.json"
+GENERATED_DIR = REPO_ROOT / "implant/generated"
+SELECTED_PROFILE_PATH = GENERATED_DIR / "selected_profile.json"
+GENERATED_HEADER_PATH = GENERATED_DIR / "profile_config.h"
 
 
-    os.replace("../implant/headers/config.tmp", "../implant/headers/config.h")
-    
+def _resolve_path(raw: str) -> pathlib.Path:
+    candidate = pathlib.Path(raw)
+    if candidate.is_absolute():
+        return candidate
+    return (THIS_DIR / candidate).resolve()
+
+
+def _load_profile(path: pathlib.Path) -> Dict[str, Any]:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError as exc:
+        raise ValueError(f"profile file not found: {path}") from exc
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"invalid profile JSON at {path}: {exc}") from exc
+
+
+def _write_selected_profile(profile: Dict[str, Any], output_path: pathlib.Path) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(profile, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def insert_listener_info(target_server: str, target_port: int, https_value: int, profile_path: pathlib.Path) -> int:
+    profile = _load_profile(profile_path)
+
+    profile["host"] = target_server
+    profile["port"] = int(target_port)
+    profile["use_https"] = bool(int(https_value))
+
+    _write_selected_profile(profile, SELECTED_PROFILE_PATH)
+
+    _, errors = validate_profile(SELECTED_PROFILE_PATH)
+    if errors:
+        for error in errors:
+            print(f"INVALID {SELECTED_PROFILE_PATH}: {error}")
+        return 1
+
+    render_cmd = [
+        sys.executable,
+        str(THIS_DIR / "render_profile_header.py"),
+        "--profile",
+        str(SELECTED_PROFILE_PATH),
+        "--output",
+        str(GENERATED_HEADER_PATH),
+    ]
+    subprocess.run(render_cmd, check=True)
+
+    print(f"Profile selection resolved: source={profile_path}")
+    print(f"Generated profile JSON: {SELECTED_PROFILE_PATH}")
+    print(f"Generated profile header: {GENERATED_HEADER_PATH}")
+    return 0
+
+
+def parse_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Inject listener values into selected profile artifact")
+    parser.add_argument("target_server")
+    parser.add_argument("target_port", type=int)
+    parser.add_argument("https_value", type=int, choices=[0, 1])
+    parser.add_argument("profile_path", nargs="?", default=str(DEFAULT_PROFILE))
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str]) -> int:
+    args = parse_args(argv)
+    profile_path = _resolve_path(args.profile_path)
+
+    try:
+        return insert_listener_info(args.target_server, args.target_port, args.https_value, profile_path)
+    except (OSError, ValueError, subprocess.CalledProcessError) as exc:
+        print(f"ERROR InsertListenerInfo: {exc}")
+        return 1
+
 
 if __name__ == "__main__":
-
-    TargetServer = sys.argv[1]
-    TargetPort = sys.argv[2]
-    HTTPSvalue = sys.argv[3]
-
-    InsertListenerInfo(TargetServer, TargetPort, HTTPSvalue)
+    raise SystemExit(main(sys.argv[1:]))

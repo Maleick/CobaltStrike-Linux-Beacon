@@ -1,0 +1,10 @@
+{
+  "fixture_id": "smoke-pwd-task-001",
+  "command": "pwd",
+  "command_id": 39,
+  "args": {},
+  "semantic_expectation": {
+    "result": "accepted",
+    "callback": "CALLBACK_PWD"
+  }
+}

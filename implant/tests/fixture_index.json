@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "generated_on": "2026-02-25",
+  "default_assertion_mode": "semantic",
+  "fixtures": [
+    {
+      "fixture_id": "meta-default-http-001",
+      "version": "v1",
+      "suite": "protocol",
+      "category": "metadata",
+      "path": "fixtures/protocol/v1/metadata/default-http.json",
+      "assertion_mode": "semantic",
+      "requirements": ["REL-01"],
+      "modes": ["quick", "full"],
+      "expected": "semantic_match"
+    },
+    {
+      "fixture_id": "task-malformed-short-header-001",
+      "version": "v1",
+      "suite": "parser",
+      "category": "malformed_task",
+      "path": "fixtures/protocol/v1/tasks/malformed-short-header.bin",
+      "assertion_mode": "semantic",
+      "requirements": ["REL-01", "REL-02"],
+      "modes": ["quick", "full"],
+      "expected": "reject_continue"
+    },
+    {
+      "fixture_id": "task-malformed-empty-payload-001",
+      "version": "v1",
+      "suite": "parser",
+      "category": "malformed_task",
+      "path": "fixtures/protocol/v1/tasks/malformed-empty-payload.bin",
+      "assertion_mode": "semantic",
+      "requirements": ["REL-02"],
+      "modes": ["quick", "full"],
+      "expected": "reject_continue"
+    },
+    {
+      "fixture_id": "task-malformed-invalid-header-001",
+      "version": "v1",
+      "suite": "parser",
+      "category": "malformed_task",
+      "path": "fixtures/protocol/v1/tasks/malformed-invalid-header.bin",
+      "assertion_mode": "semantic",
+      "requirements": ["REL-02"],
+      "modes": ["quick", "full"],
+      "expected": "reject_continue"
+    },
+    {
+      "fixture_id": "task-malformed-oversized-length-001",
+      "version": "v1",
+      "suite": "parser",
+      "category": "malformed_task",
+      "path": "fixtures/protocol/v1/tasks/malformed-oversized-length.bin",
+      "assertion_mode": "semantic",
+      "requirements": ["REL-02"],
+      "modes": ["quick", "full"],
+      "expected": "reject_continue"
+    },
+    {
+      "fixture_id": "smoke-sleep-task-001",
+      "version": "v1",
+      "suite": "smoke",
+      "category": "command_smoke",
+      "path": "fixtures/protocol/v1/smoke/sleep-task.json",
+      "assertion_mode": "semantic",
+      "requirements": ["REL-01"],
+      "modes": ["quick", "full"],
+      "expected": "callback_match"
+    },
+    {
+      "fixture_id": "smoke-pwd-task-001",
+      "version": "v1",
+      "suite": "smoke",
+      "category": "command_smoke",
+      "path": "fixtures/protocol/v1/smoke/pwd-task.json",
+      "assertion_mode": "semantic",
+      "requirements": ["REL-01"],
+      "modes": ["quick", "full"],
+      "expected": "callback_match"
+    },
+    {
+      "fixture_id": "smoke-cd-task-001",
+      "version": "v1",
+      "suite": "smoke",
+      "category": "command_smoke",
+      "path": "fixtures/protocol/v1/smoke/cd-task.json",
+      "assertion_mode": "semantic",
+      "requirements": ["REL-01"],
+      "modes": ["quick", "full"],
+      "expected": "callback_match"
+    },
+    {
+      "fixture_id": "profile-default-metadata-001",
+      "version": "v1",
+      "suite": "profile",
+      "category": "profile_compatibility",
+      "path": "fixtures/protocol/v1/profile/default-metadata.json",
+      "assertion_mode": "semantic",
+      "requirements": ["C2P-02", "C2P-03"],
+      "modes": ["quick", "full"],
+      "expected": "semantic_match"
+    },
+    {
+      "fixture_id": "profile-nondefault-metadata-001",
+      "version": "v1",
+      "suite": "profile",
+      "category": "profile_compatibility",
+      "path": "fixtures/protocol/v1/profile/nondefault-metadata.json",
+      "assertion_mode": "semantic",
+      "requirements": ["C2P-02", "C2P-03"],
+      "modes": ["quick", "full"],
+      "expected": "semantic_match"
+    }
+  ]
+}
