@@ -5,7 +5,7 @@
   "commit_docs": true,
   "search_gitignored": false,
   "model_profile": "balanced",
-  "branching_strategy": "none",
+  "branching_strategy": "milestone",
   "phase_branch_template": "gsd/phase-{phase}-{slug}",
   "milestone_branch_template": "gsd/{milestone}-{slug}",
   "workflow": {
