@@ -137,7 +137,7 @@ Plans:
 
 Plans:
 - [x] 06-01: Scaffold `implant-macos/` tree — verbatim copies (`http.c`, `crypto.c`, `profile.c`, `pivot.c`, `files.c`, all headers) + macOS Makefile with dynamic Homebrew path resolution
-- [ ] 06-02: Rewrite `beacon.c` for macOS — `getprogname()`, `uint32_t` type fix, remove ELFLoader dependency; rewrite `main.c` (cosmetic)
+- [x] 06-02: Rewrite `beacon.c` for macOS — `getprogname()`, `uint32_t` type fix, remove ELFLoader dependency; rewrite `main.c` (cosmetic)
 - [ ] 06-03: Rewrite `commands.c` for macOS — remove ELFRunner include and case 200; preserve shell prefix offset; verify compilation clean
 
 ---
@@ -207,7 +207,7 @@ Plans:
 | 3. Reverse TCP Transport Mode | 0/3 | Paused (v1 stream) | — |
 | 4. Security and Build Hygiene | 0/3 | Paused (v1 stream) | — |
 | 5. CI and Release Readiness | 0/2 | Paused (v1 stream) | — |
-| 6. macOS Tree Scaffold and Build System | 1/3 | In progress | — |
+| 6. macOS Tree Scaffold and Build System | 2/3 | In progress | — |
 | 7. Generation Pipeline and Live Check-in | 0/3 | Not started | — |
 | 8. POSIX Command Parity and SOCKS Pivot | 0/2 | Not started | — |
 | 9. Test Harness and Operator Handoff | 0/2 | Not started | — |

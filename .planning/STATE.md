@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: macOS ARM64 Beacon
 status: in_progress
-stopped_at: Completed 06-01-PLAN.md — implant-macos/ tree scaffold and Makefile complete
-last_updated: "2026-02-27T02:33:16Z"
+stopped_at: Completed 06-02-PLAN.md — beacon.c getprogname()+uint32_t fix and main.c version string
+last_updated: "2026-02-27T02:39:35Z"
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 10
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
@@ -24,11 +24,11 @@ See: .planning/PROJECT.md (updated 2026-02-26)
 ## Current Position
 
 Phase: 6 of 9 (macOS Tree Scaffold and Build System)
-Plan: 1 of 3 in current phase
-Status: In progress — plan 06-01 complete
-Last activity: 2026-02-27 — implant-macos/ scaffold and Makefile complete
+Plan: 2 of 3 in current phase
+Status: In progress — plan 06-02 complete
+Last activity: 2026-02-27 — beacon.c and main.c macOS rewrites complete
 
-Progress: [#░░░░░░░░░] 10%
+Progress: [##░░░░░░░░] 20%
 
 ## v1.0 Linux Stream (Paused)
 
@@ -47,7 +47,7 @@ Resume with: `/gsd:resume-work` (see `.planning/phases/03-reverse-tcp-transport/
 
 | Phase | Status | Plans |
 |-------|--------|-------|
-| 6. macOS Tree Scaffold and Build System | ◑ In progress | 1/3 |
+| 6. macOS Tree Scaffold and Build System | ◑ In progress | 2/3 |
 | 7. macOS Beacon Core Rewrites | ○ Not started | 0/3 |
 | 8. macOS Command Parity | ○ Not started | 0/3 |
 | 9. macOS Stabilization | ○ Not started | 0/1 |
@@ -55,13 +55,14 @@ Resume with: `/gsd:resume-work` (see `.planning/phases/03-reverse-tcp-transport/
 ## Performance Metrics
 
 **Velocity (v2.0 stream):**
-- Total plans completed: 1
-- Average duration: 5 min
+- Total plans completed: 2
+- Average duration: 4 min
 - Total execution time: 0.1 hours
 
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
 | 06-01 | 5 min | 2 | 16 |
+| 06-02 | 3 min | 2 | 2 |
 
 *Updated after each plan completion*
 
@@ -83,6 +84,9 @@ Recent decisions affecting current work:
 - [06-01] Ad-hoc codesign in link target: checks existing signature before applying codesign
 - [06-01] -mmacosx-version-min=12.0 for maximum Apple Silicon (M1-M4) compatibility
 - [06-01] Sync comment format: /* copied from implant/src/<file>, last synced 2026-02-26 */
+- [06-02] getprogname() in stdlib.h (already included) — no new headers needed for MAC-06 fix
+- [06-02] uint32_t + htonl() for all three 4-byte var4/5/6 fields — Linux version incorrectly used htons() for var5 and var6
+- [06-02] No #ifdef __APPLE__ guards in implant-macos/ tree — macOS-only by design
 
 ### Pending Todos
 
@@ -96,6 +100,6 @@ None.
 
 ## Session Continuity
 
-**Last session:** 2026-02-27T02:28:34Z
-**Stopped at:** Completed 06-01-PLAN.md
+**Last session:** 2026-02-27T02:39:35Z
+**Stopped at:** Completed 06-02-PLAN.md
 **Resume file:** .planning/STATE.md

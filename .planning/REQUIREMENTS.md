@@ -48,9 +48,9 @@ Requirements for macOS ARM64 purple-team milestone. ARM64 (M1–M4) only; intern
 
 ### Protocol Correctness
 
-- [ ] **MAC-04**: Beacon metadata packet uses `uint32_t` types for `var4`/`var5`/`var6` fields — no `uint16_t`/`htonl()` mismatch that causes Team Server HMAC failure.
+- [x] **MAC-04**: Beacon metadata packet uses `uint32_t` types for `var4`/`var5`/`var6` fields — no `uint16_t`/`htonl()` mismatch that causes Team Server HMAC failure.
 - [ ] **MAC-05**: Beacon check-in shows correct macOS marketing version (`15.x` via `sysctlbyname("kern.osproductversion")`) — not Darwin kernel version (`24.x`).
-- [ ] **MAC-06**: Beacon check-in shows real process name via `getprogname()` — not Linux `/proc/self/status` fallback (`"linuxbeacon"`).
+- [x] **MAC-06**: Beacon check-in shows real process name via `getprogname()` — not Linux `/proc/self/status` fallback (`"linuxbeacon"`).
 
 ### Transport and C2 Connectivity
 
@@ -130,9 +130,9 @@ Explicitly excluded. Documented to prevent scope creep.
 | MAC-01 | Phase 6 | ✓ Complete (06-01) |
 | MAC-02 | Phase 6 | ✓ Complete (06-01) |
 | MAC-03 | Phase 6 | ✓ Complete (06-01) |
-| MAC-04 | Phase 6 | Pending |
+| MAC-04 | Phase 6 | ✓ Complete (06-02) |
 | MAC-05 | Phase 7 | Pending |
-| MAC-06 | Phase 6 | Pending |
+| MAC-06 | Phase 6 | ✓ Complete (06-02) |
 | MAC-07 | Phase 7 | Pending |
 | MAC-08 | Phase 7 | Pending |
 | MAC-09 | Phase 7 | Pending |
