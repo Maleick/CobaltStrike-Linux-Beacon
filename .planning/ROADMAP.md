@@ -81,9 +81,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 03-01: Implement TCP transport module and runtime mode selection
-- [ ] 03-02: Extend generation scripts/Aggressor flow for transport mode selection
-- [ ] 03-03: Add reconnect/backoff policy and transport-mode regression tests
+- [ ] 03-01-PLAN.md — C transport layer: transport.h interface, tcp.c implementation, http.c refactor, Makefile TRANSPORT variable
+- [ ] 03-02-PLAN.md — Generation layer: CNA drow_listener + transport detection, InsertListenerInfo.py transport_mode migration
+- [ ] 03-03-PLAN.md — Reconnect/backoff in main.c and transport regression suite
 
 ---
 
