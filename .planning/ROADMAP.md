@@ -24,6 +24,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 ### v2.0 macOS ARM64 Stream (Phases 6–9)
 
+- [x] **Phase 6: macOS Tree Scaffold and Build System** - Compilable Mach-O ARM64 binary with correct protocol baseline. (completed 2026-02-27)
 - [ ] **Phase 6: macOS Tree Scaffold and Build System** - Compilable Mach-O ARM64 binary with correct protocol baseline.
 - [ ] **Phase 7: Generation Pipeline and Live Check-in** - Operator Aggressor workflow + confirmed live Team Server check-in.
 - [ ] **Phase 8: POSIX Command Parity and SOCKS Pivot** - All in-scope POSIX commands and pivot validated on macOS.
@@ -133,6 +134,13 @@ Plans:
   3. Homebrew OpenSSL and libcurl paths are resolved dynamically — build succeeds regardless of ARM64 vs Intel Homebrew layout.
   4. Metadata packet uses `uint32_t` for `var4`/`var5`/`var6` — no `uint16_t`/`htonl()` type mismatch.
   5. Beacon shows real process name (`getprogname()`) — not Linux `/proc/self/status` fallback.
+**Status**: Complete (2026-02-27)
+**Plans**: 3/3 complete
+
+Plans:
+- [x] 06-01: Scaffold `implant-macos/` tree — verbatim copies (`http.c`, `crypto.c`, `profile.c`, `pivot.c`, `files.c`, all headers) + macOS Makefile with dynamic Homebrew path resolution
+- [x] 06-02: Rewrite `beacon.c` for macOS — `getprogname()`, `uint32_t` type fix, remove ELFLoader dependency; rewrite `main.c` (cosmetic)
+- [x] 06-03: Rewrite `commands.c` for macOS — remove ELFRunner include and case 200; preserve shell prefix offset; verify compilation clean
 **Plans**: 3 plans
 
 Plans:
@@ -207,6 +215,7 @@ Plans:
 | 3. Reverse TCP Transport Mode | 0/3 | Paused (v1 stream) | — |
 | 4. Security and Build Hygiene | 0/3 | Paused (v1 stream) | — |
 | 5. CI and Release Readiness | 0/2 | Paused (v1 stream) | — |
+| 6. macOS Tree Scaffold and Build System | 3/3 | ✓ Complete | 2026-02-27 |
 | 6. macOS Tree Scaffold and Build System | 0/3 | Not started | — |
 | 7. Generation Pipeline and Live Check-in | 0/3 | Not started | — |
 | 8. POSIX Command Parity and SOCKS Pivot | 0/2 | Not started | — |
