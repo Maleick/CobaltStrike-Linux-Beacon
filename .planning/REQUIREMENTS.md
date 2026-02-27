@@ -42,9 +42,9 @@ Requirements for macOS ARM64 purple-team milestone. ARM64 (M1–M4) only; intern
 
 ### Build and Binary Integrity
 
-- [ ] **MAC-01**: `implant-macos/` compiles cleanly with Apple Clang and `-arch arm64` with zero warnings under `-Wall -Wextra`.
-- [ ] **MAC-02**: Generated Mach-O binary carries a valid ad-hoc code signature; executes on macOS Sequoia 15.x without `Killed: 9`.
-- [ ] **MAC-03**: Build system resolves Homebrew OpenSSL and libcurl paths dynamically (`brew --prefix`) — portable across ARM64 and Intel Homebrew layouts.
+- [x] **MAC-01**: `implant-macos/` compiles cleanly with Apple Clang and `-arch arm64` with zero warnings under `-Wall -Wextra`. *(Phase 6, plan 06-01 — Makefile with CC=clang, -arch arm64, -Wall -Wextra established)*
+- [x] **MAC-02**: Generated Mach-O binary carries a valid ad-hoc code signature; executes on macOS Sequoia 15.x without `Killed: 9`. *(Phase 6, plan 06-01 — ad-hoc codesign step in Makefile link target)*
+- [x] **MAC-03**: Build system resolves Homebrew OpenSSL and libcurl paths dynamically (`brew --prefix`) — portable across ARM64 and Intel Homebrew layouts. *(Phase 6, plan 06-01 — dynamic brew --prefix path resolution, make check-deps passes)*
 
 ### Protocol Correctness
 
@@ -127,9 +127,9 @@ Explicitly excluded. Documented to prevent scope creep.
 | SEC-02 | Phase 4 | Pending (v1 paused) |
 | SEC-03 | Phase 4 | Pending (v1 paused) |
 | REL-03 | Phase 5 | Pending (v1 paused) |
-| MAC-01 | Phase 6 | Pending |
-| MAC-02 | Phase 6 | Pending |
-| MAC-03 | Phase 6 | Pending |
+| MAC-01 | Phase 6 | ✓ Complete (06-01) |
+| MAC-02 | Phase 6 | ✓ Complete (06-01) |
+| MAC-03 | Phase 6 | ✓ Complete (06-01) |
 | MAC-04 | Phase 6 | Pending |
 | MAC-05 | Phase 7 | Pending |
 | MAC-06 | Phase 6 | Pending |
@@ -144,9 +144,9 @@ Explicitly excluded. Documented to prevent scope creep.
 
 **Coverage:**
 - v1 requirements: 12 total (5 complete, 7 pending on paused stream)
-- v2 requirements: 14 total (0 complete, all mapped to phases 6–9)
+- v2 requirements: 14 total (3 complete, 11 pending on active stream)
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-02-25*
-*Last updated: 2026-02-26 after v2.0 macOS ARM64 milestone research*
+*Last updated: 2026-02-27 after Phase 6 Plan 06-01 (MAC-01, MAC-02, MAC-03 complete)*
