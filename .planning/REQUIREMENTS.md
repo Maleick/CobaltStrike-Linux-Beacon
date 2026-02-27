@@ -51,6 +51,15 @@ Requirements for macOS ARM64 purple-team milestone. ARM64 (M1–M4) only; intern
 - [x] **MAC-04**: Beacon metadata packet uses `uint32_t` types for `var4`/`var5`/`var6` fields — no `uint16_t`/`htonl()` mismatch that causes Team Server HMAC failure.
 - [ ] **MAC-05**: Beacon check-in shows correct macOS marketing version (`15.x` via `sysctlbyname("kern.osproductversion")`) — not Darwin kernel version (`24.x`).
 - [x] **MAC-06**: Beacon check-in shows real process name via `getprogname()` — not Linux `/proc/self/status` fallback (`"linuxbeacon"`).
+- [ ] **MAC-01**: `implant-macos/` compiles cleanly with Apple Clang and `-arch arm64` with zero warnings under `-Wall -Wextra`.
+- [ ] **MAC-02**: Generated Mach-O binary carries a valid ad-hoc code signature; executes on macOS Sequoia 15.x without `Killed: 9`.
+- [ ] **MAC-03**: Build system resolves Homebrew OpenSSL and libcurl paths dynamically (`brew --prefix`) — portable across ARM64 and Intel Homebrew layouts.
+
+### Protocol Correctness
+
+- [ ] **MAC-04**: Beacon metadata packet uses `uint32_t` types for `var4`/`var5`/`var6` fields — no `uint16_t`/`htonl()` mismatch that causes Team Server HMAC failure.
+- [ ] **MAC-05**: Beacon check-in shows correct macOS marketing version (`15.x` via `sysctlbyname("kern.osproductversion")`) — not Darwin kernel version (`24.x`).
+- [ ] **MAC-06**: Beacon check-in shows real process name via `getprogname()` — not Linux `/proc/self/status` fallback (`"linuxbeacon"`).
 
 ### Transport and C2 Connectivity
 
@@ -133,6 +142,12 @@ Explicitly excluded. Documented to prevent scope creep.
 | MAC-04 | Phase 6 | ✓ Complete (06-02) |
 | MAC-05 | Phase 7 | Pending |
 | MAC-06 | Phase 6 | ✓ Complete (06-02) |
+| MAC-01 | Phase 6 | Pending |
+| MAC-02 | Phase 6 | Pending |
+| MAC-03 | Phase 6 | Pending |
+| MAC-04 | Phase 6 | Pending |
+| MAC-05 | Phase 7 | Pending |
+| MAC-06 | Phase 6 | Pending |
 | MAC-07 | Phase 7 | Pending |
 | MAC-08 | Phase 7 | Pending |
 | MAC-09 | Phase 7 | Pending |
@@ -145,8 +160,10 @@ Explicitly excluded. Documented to prevent scope creep.
 **Coverage:**
 - v1 requirements: 12 total (5 complete, 7 pending on paused stream)
 - v2 requirements: 14 total (3 complete, 11 pending on active stream)
+- v2 requirements: 14 total (0 complete, all mapped to phases 6–9)
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-02-25*
 *Last updated: 2026-02-27 after Phase 6 Plan 06-01 (MAC-01, MAC-02, MAC-03 complete)*
+*Last updated: 2026-02-26 after v2.0 macOS ARM64 milestone research*
