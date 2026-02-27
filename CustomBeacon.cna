@@ -20,10 +20,10 @@ sub genBeaconMenu {
 
 	# Create a dialog. Use &dialog_show to show it. Args in Order: 1. Title of the dialog; 2. A %dictionary mapping row names to default values; 3.A callback function that gets called when the user presses a &dbutton_action button.
 	# $1 is a reference to the dialog. $2 is the button name. $3 is a dictionary that maps each row's name to its value.
-	$dialog = dialog("Custom Beacon Generator", %(listener => "Select Listener: ", Beacon_name => "Beacon_x64", Profile_path => "../profiles/http/default-profile.json"), &genPayload); 
+	$dialog = dialog("Custom Beacon Generator", %(listener => "Select Listener: ", Beacon_name => "Beacon_x64", Profile_path => "../profiles/http/default-profile.json", platform => "Linux"), &genPayload); 
 	
 	# Adds a description to a &dialog
-	dialog_description($dialog, "Creates a custom Beacon implant\n- Currently only supports HTTP/S listeners");
+	dialog_description($dialog, "Creates a custom Beacon implant\n- Supports Linux x64 and macOS ARM64");
 	
 	# Adds a listener selection row to a &dialog. This row only shows listeners with stagers (e.g., windows/beacon_https/reverse_https).
 	drow_listener_stage($dialog, "listener", "Listener: "); # Alternative is drow_listener which only shows staged Beacons whereas this shows stageless and staged
@@ -32,6 +32,8 @@ sub genBeaconMenu {
 	drow_text($dialog, "Beacon_name", "Executable Name: "); 
 	drow_text($dialog, "Profile_path", "Profile Path: ");
 	
+	drow_combobox($dialog, "platform", "Platform: ", @("Linux", "macOS"));
+
 	# Adds an action button to a &dialog. When this button is pressed, the dialog closes and its callback is called.
 	dbutton_action($dialog, "Generate");
 	
@@ -45,7 +47,7 @@ sub genPayload {
 	# check if user is on a linux or windows box
 	#	
 	if (substr(cwd(), 0, 1) eq "/") {
-		$os = "linux";
+		$os = "unix";
 	} else {
 		$os = "windows";
 		show_message("Generating custom payloads on Windows has not yet been tested!");
@@ -54,6 +56,18 @@ sub genPayload {
 	
 	$filename = $3['Beacon_name']; 
 	$ProfilePath = $3['Profile_path'];
+	$platform = $3['platform'];
+	$TargetFlag = "";
+	$TargetImplantDir = $ImplantSrcDirectory;
+
+	if ($platform eq "macOS") {
+		$TargetFlag = " --target macos";
+		$TargetImplantDir = $CustomBeaconProjectFolder . "/implant-macos/";
+	} else {
+		$TargetFlag = " --target linux";
+		$TargetImplantDir = $CustomBeaconProjectFolder . "/implant/";
+	}
+
 	if ($ProfilePath eq "")
 	{
 		$ProfilePath = "../profiles/http/default-profile.json";
@@ -80,7 +94,7 @@ sub genPayload {
 	$payloadType = listener_info($ListenerName, "payload");
 	if ($payloadType ne "windows/beacon_http/reverse_http" && $payloadType ne "windows/beacon_https/reverse_https")
 	{
-		show_message("This is an invalid listener type for the Linux Beacon! Only reverse_http and reverse_https are supported.");
+		show_message("This is an invalid listener type for the Custom Beacon! Only reverse_http and reverse_https are supported.");
 		return;
 	}
 	else if ($payloadType eq "windows/beacon_http/reverse_http")
@@ -96,7 +110,7 @@ sub genPayload {
 	
 	# InsertListenerInfo.py runs validate_profile.py + render_profile_header.py
 	# so generation fails fast before make if profile config is invalid.
-	$command = "python3 InsertListenerInfo.py " . $TargetServer . " " . $TargetPort . " " . $HTTPSvalue . " " . $ProfilePath;
+	$command = "python3 InsertListenerInfo.py " . $TargetServer . " " . $TargetPort . " " . $HTTPSvalue . " " . $ProfilePath . $TargetFlag;
 	println($command);
 	$process = exec($command, $null, $GeneratePayloadDirectory);
 	@data = readAll($process);
@@ -118,7 +132,7 @@ sub genPayload {
 	#
 	# Insert public key into beacon.c
 	#
-	$command = "python3 InsertPublicKey.py";
+	$command = "python3 InsertPublicKey.py" . $TargetFlag;
 	println($command);
 	$process = exec($command, $null, $GeneratePayloadDirectory);
 	@data = readAll($process);
@@ -132,7 +146,7 @@ sub genPayload {
 	#
 	$command = "make clean -f Makefile OUTPUT=" . $filename;
 	println($command);
-	$process = exec($command, $null, $ImplantSrcDirectory);
+	$process = exec($command, $null, $TargetImplantDir);
 	@data = readAll($process);
 	foreach $line (@data) {
         println($line);
@@ -141,7 +155,7 @@ sub genPayload {
 	
 	$command = "make -f Makefile OUTPUT=" . $filename;
 	println($command);
-	$process = exec($command, $null, $ImplantSrcDirectory);
+	$process = exec($command, $null, $TargetImplantDir);
 	@data = readAll($process);
 	foreach $line (@data) {
         println($line);
@@ -151,7 +165,7 @@ sub genPayload {
 	#
 	# Remove public key from beacon.c after compiling
 	#
-	$command = "python3 RemovePublicKey.py";
+	$command = "python3 RemovePublicKey.py" . $TargetFlag;
 	println($command);
 	$process = exec($command, $null, $GeneratePayloadDirectory);
 	@data = readAll($process);
@@ -163,6 +177,6 @@ sub genPayload {
 	#
 	# Yay
 	#
-	show_message("Your custom implant has been generated at " . $CustomBeaconProjectFolder . "/implant/bin/" . $filename);
+	show_message("Your custom " . $platform . " implant has been generated at " . $TargetImplantDir . "/bin/" . $filename);
 	
 }

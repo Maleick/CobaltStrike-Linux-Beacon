@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: macOS ARM64 Beacon
 status: in_progress
-stopped_at: Completed 06-03-PLAN.md — commands.c macOS port and full ARM64 build
-last_updated: "2026-02-27T04:13:26.820Z"
+stopped_at: Completed 07-02-PLAN.md — Aggressor Workflow and macOS OS Version Fix
+last_updated: "2026-02-27T01:15:00.000Z"
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 10
-  completed_plans: 3
+  completed_plans: 5
 ---
 
 # Project State
@@ -19,16 +19,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Operators can deploy a Cobalt Strike-compatible beacon on Linux x64 and macOS ARM64 hosts, with a safe and extensible generation workflow for each platform.
-**Current focus:** v2.0 macOS ARM64 Beacon — Phase 6 complete, ready for Phase 7
+**Current focus:** v2.0 macOS ARM64 Beacon — Phase 7 generation pipeline and validation
 
 ## Current Position
 
-Phase: 6 of 9 (macOS Tree Scaffold and Build System) — COMPLETE
-Plan: 3 of 3 in phase 6 — phase complete
-Status: Phase 6 complete — Mach-O ARM64 binary produced, all criteria verified
-Last activity: 2026-02-27 — commands.c ported, binary built and signed
+Phase: 7 of 9 (Generation Pipeline and Live Check-in Validation) — IN PROGRESS
+Plan: 2 of 3 in phase 7 — plans 07-01 and 07-02 complete; 07-03 pending live validation
+Status: Generation scripts and Aggressor workflow updated for macOS; macOS beacon OS version fix implemented.
+Last activity: 2026-02-27 — Aggressor workflow and macOS OS version fix
 
-Progress: [###░░░░░░░] 30%
+Progress: [#####░░░░░] 50%
 
 ## v1.0 Linux Stream (Paused)
 
@@ -49,22 +49,24 @@ Resume with: `/gsd:resume-work` (see `.planning/phases/03-reverse-tcp-transport/
 | Phase | Status | Plans |
 |-------|--------|-------|
 | 6. macOS Tree Scaffold and Build System | ✓ Complete | 3/3 |
-| 7. macOS Beacon Core Rewrites | ○ Not started | 0/3 |
-| 8. macOS Command Parity | ○ Not started | 0/3 |
-| 9. macOS Stabilization | ○ Not started | 0/1 |
+| 7. Generation Pipeline and Live Check-in | ◑ In Progress | 2/3 |
+| 8. macOS Command Parity | ○ Not started | 0/2 |
+| 9. macOS Stabilization | ○ Not started | 0/2 |
 
 ## Performance Metrics
 
 **Velocity (v2.0 stream):**
-- Total plans completed: 3
-- Average duration: 4 min
-- Total execution time: 0.2 hours
+- Total plans completed: 5
+- Average duration: 9 min
+- Total execution time: 0.8 hours
 
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
 | 06-01 | 5 min | 2 | 16 |
 | 06-02 | 3 min | 2 | 2 |
 | 06-03 | 4 min | 2 | 3 |
+| 07-01 | 10 min | 3 | 3 |
+| 07-02 | 15 min | 3 | 2 |
 
 ## Accumulated Context
 

@@ -24,8 +24,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 ### v2.0 macOS ARM64 Stream (Phases 6–9)
 
-- [ ] **Phase 6: macOS Tree Scaffold and Build System** - Compilable Mach-O ARM64 binary with correct protocol baseline.
-- [ ] **Phase 7: Generation Pipeline and Live Check-in** - Operator Aggressor workflow + confirmed live Team Server check-in.
+- [x] **Phase 6: macOS Tree Scaffold and Build System** - Compilable Mach-O ARM64 binary with correct protocol baseline. (completed 2026-02-27)
+- [ ] **Phase 7: Generation Pipeline and Live Check-in Validation** - Operator Aggressor workflow + confirmed live Team Server check-in.
 - [ ] **Phase 8: POSIX Command Parity and SOCKS Pivot** - All in-scope POSIX commands and pivot validated on macOS.
 - [ ] **Phase 9: Test Harness and Operator Handoff** - Fixture-backed regression coverage and purple-team deployment docs.
 
@@ -133,12 +133,13 @@ Plans:
   3. Homebrew OpenSSL and libcurl paths are resolved dynamically — build succeeds regardless of ARM64 vs Intel Homebrew layout.
   4. Metadata packet uses `uint32_t` for `var4`/`var5`/`var6` — no `uint16_t`/`htonl()` type mismatch.
   5. Beacon shows real process name (`getprogname()`) — not Linux `/proc/self/status` fallback.
-**Plans**: 3 plans
+**Status**: Complete (2026-02-27)
+**Plans**: 3/3 complete
 
 Plans:
-- [ ] 06-01: Scaffold `implant-macos/` tree — verbatim copies (`http.c`, `crypto.c`, `profile.c`, `pivot.c`, `files.c`, all headers) + macOS Makefile with dynamic Homebrew path resolution
-- [ ] 06-02: Rewrite `beacon.c` for macOS — `getprogname()`, `uint32_t` type fix, remove ELFLoader dependency; rewrite `main.c` (cosmetic)
-- [ ] 06-03: Rewrite `commands.c` for macOS — remove ELFRunner include and case 200; preserve shell prefix offset; verify compilation clean
+- [x] 06-01-PLAN.md — Scaffold `implant-macos/` tree — verbatim copies (`http.c`, `crypto.c`, `profile.c`, `pivot.c`, `files.c`, all headers) + macOS Makefile with dynamic Homebrew path resolution
+- [x] 06-02-PLAN.md — Rewrite `beacon.c` for macOS — `getprogname()`, `uint32_t` type fix, remove ELFLoader dependency; rewrite `main.c` (cosmetic)
+- [x] 06-03-PLAN.md — Rewrite `commands.c` for macOS — remove ELFRunner include and case 200; preserve shell prefix offset; verify compilation clean
 
 ---
 
@@ -146,18 +147,19 @@ Plans:
 **Goal**: Operator-configurable macOS payload via Aggressor workflow + confirmed live Team Server check-in showing correct metadata.
 **Depends on**: Phase 6
 **Requirements**: MAC-05, MAC-07, MAC-08, MAC-09, MAC-10
-**Research**: `%COMSPEC% /C` shell task offset (21 bytes) is HIGH confidence from Linux behavior; validate against real macOS-directed session during live check-in step.
+**Research**: %COMSPEC% /C shell task offset (21 bytes) is HIGH confidence from Linux behavior; validate against real macOS-directed session during live check-in step.
 **Success Criteria** (what must be TRUE):
   1. Operator selects macOS ARM64 in the Aggressor dialog and receives a configured binary — no manual Python invocation required.
-  2. `--target macos` routes all generated artifacts to `implant-macos/generated/` without affecting the Linux generation path.
-  3. Live check-in: beacon appears in Team Server console with correct hostname, username, process name, and macOS marketing version (`15.x`).
-  4. `sleep`, `pwd`, and `shell` commands execute and return correct output in a live session.
+  2. --target macos routes all generated artifacts to implant-macos/generated/ without affecting the Linux generation path.
+  3. Live check-in: beacon appears in Team Server console with correct hostname, username, process name, and macOS marketing version (15.x).
+  4. sleep, pwd, and shell commands execute and return correct output in a live session.
+**Status**: In progress (07-01 and 07-02 complete)
 **Plans**: 3 plans
 
 Plans:
-- [ ] 07-01: Extend generation scripts with `--target [linux|macos]` flag — `InsertListenerInfo.py`, `InsertPublicKey.py`, `RemovePublicKey.py`; route to `implant-macos/generated/`
-- [ ] 07-02: Extend `CustomBeacon.cna` with Platform selector row; wire `--target macos` to generation invocations; replace `uname().release` parse with `sysctlbyname("kern.osproductversion")` in macOS `beacon.c`
-- [ ] 07-03: End-to-end live check-in validation — generate macOS payload, confirm metadata in Team Server console, validate `sleep`/`pwd`/`shell` responses, lock shell offset fixture
+- [x] 07-01-PLAN.md — Extend generation scripts with --target [linux|macos] flag — InsertListenerInfo.py, InsertPublicKey.py, RemovePublicKey.py; route to implant-macos/generated/
+- [x] 07-02-PLAN.md — Extend CustomBeacon.cna with Platform selector row; wire --target macos to generation invocations; replace uname().release parse with sysctlbyname("kern.osproductversion") in macOS beacon.c
+- [ ] 07-03-PLAN.md — End-to-end live check-in validation — generate macOS payload, confirm metadata in Team Server console, validate sleep/pwd/shell responses, lock shell offset fixture
 
 ---
 
@@ -170,6 +172,7 @@ Plans:
   1. `cd`, `ls`, `upload`, `download` commands return correct output/behavior on macOS.
   2. SOCKS pivot establishes sessions, forwards traffic, and closes cleanly on macOS.
   3. No Linux-specific API calls (`epoll`, `AF_PACKET`, `SIOCGIFHWADDR`) are present in the macOS build.
+**Status**: Not started
 **Plans**: 2 plans
 
 Plans:
@@ -188,6 +191,7 @@ Plans:
   2. Existing `implant/tests/` protocol fixtures are reused unchanged where compatible; macOS-specific fixtures cover `getprogname()` and `sysctlbyname()` output.
   3. Operator runbook documents the quarantine xattr deployment procedure (`xattr -d com.apple.quarantine`) for transferred binaries.
   4. No ELFRunner or `/proc/self/status` fixture references remain in the macOS test tree.
+**Status**: Not started
 **Plans**: 2 plans
 
 Plans:
@@ -207,7 +211,7 @@ Plans:
 | 3. Reverse TCP Transport Mode | 0/3 | Paused (v1 stream) | — |
 | 4. Security and Build Hygiene | 0/3 | Paused (v1 stream) | — |
 | 5. CI and Release Readiness | 0/2 | Paused (v1 stream) | — |
-| 6. macOS Tree Scaffold and Build System | 0/3 | Not started | — |
-| 7. Generation Pipeline and Live Check-in | 0/3 | Not started | — |
+| 6. macOS Tree Scaffold and Build System | 3/3 | ✓ Complete | 2026-02-27 |
+| 7. Generation Pipeline and Live Check-in | 0/3 | In progress | — |
 | 8. POSIX Command Parity and SOCKS Pivot | 0/2 | Not started | — |
 | 9. Test Harness and Operator Handoff | 0/2 | Not started | — |

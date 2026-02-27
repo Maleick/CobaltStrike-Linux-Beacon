@@ -15,10 +15,6 @@ from validate_profile import validate_profile
 THIS_DIR = pathlib.Path(__file__).resolve().parent
 REPO_ROOT = THIS_DIR.parent
 DEFAULT_PROFILE = REPO_ROOT / "profiles/http/default-profile.json"
-GENERATED_DIR = REPO_ROOT / "implant/generated"
-SELECTED_PROFILE_PATH = GENERATED_DIR / "selected_profile.json"
-GENERATED_HEADER_PATH = GENERATED_DIR / "profile_config.h"
-
 
 def _resolve_path(raw: str) -> pathlib.Path:
     candidate = pathlib.Path(raw)
@@ -41,34 +37,43 @@ def _write_selected_profile(profile: Dict[str, Any], output_path: pathlib.Path) 
     output_path.write_text(json.dumps(profile, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def insert_listener_info(target_server: str, target_port: int, https_value: int, profile_path: pathlib.Path) -> int:
+def insert_listener_info(target_server: str, target_port: int, https_value: int, profile_path: pathlib.Path, target: str) -> int:
     profile = _load_profile(profile_path)
 
     profile["host"] = target_server
     profile["port"] = int(target_port)
     profile["use_https"] = bool(int(https_value))
 
-    _write_selected_profile(profile, SELECTED_PROFILE_PATH)
+    # Dynamically set output paths based on target
+    if target == "macos":
+        generated_dir = REPO_ROOT / "implant-macos/generated"
+    else:
+        generated_dir = REPO_ROOT / "implant/generated"
 
-    _, errors = validate_profile(SELECTED_PROFILE_PATH)
+    selected_profile_path = generated_dir / "selected_profile.json"
+    generated_header_path = generated_dir / "profile_config.h"
+
+    _write_selected_profile(profile, selected_profile_path)
+
+    _, errors = validate_profile(selected_profile_path)
     if errors:
         for error in errors:
-            print(f"INVALID {SELECTED_PROFILE_PATH}: {error}")
+            print(f"INVALID {selected_profile_path}: {error}")
         return 1
 
     render_cmd = [
         sys.executable,
         str(THIS_DIR / "render_profile_header.py"),
         "--profile",
-        str(SELECTED_PROFILE_PATH),
+        str(selected_profile_path),
         "--output",
-        str(GENERATED_HEADER_PATH),
+        str(generated_header_path),
     ]
     subprocess.run(render_cmd, check=True)
 
-    print(f"Profile selection resolved: source={profile_path}")
-    print(f"Generated profile JSON: {SELECTED_PROFILE_PATH}")
-    print(f"Generated profile header: {GENERATED_HEADER_PATH}")
+    print(f"Profile selection resolved: source={profile_path} target={target}")
+    print(f"Generated profile JSON: {selected_profile_path.relative_to(REPO_ROOT)}")
+    print(f"Generated profile header: {generated_header_path.relative_to(REPO_ROOT)}")
     return 0
 
 
@@ -78,6 +83,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("target_port", type=int)
     parser.add_argument("https_value", type=int, choices=[0, 1])
     parser.add_argument("profile_path", nargs="?", default=str(DEFAULT_PROFILE))
+    parser.add_argument("--target", choices=["linux", "macos"], default="linux", help="Target platform (default: linux)")
     return parser.parse_args(argv)
 
 
@@ -86,7 +92,7 @@ def main(argv: list[str]) -> int:
     profile_path = _resolve_path(args.profile_path)
 
     try:
-        return insert_listener_info(args.target_server, args.target_port, args.https_value, profile_path)
+        return insert_listener_info(args.target_server, args.target_port, args.https_value, profile_path, args.target)
     except (OSError, ValueError, subprocess.CalledProcessError) as exc:
         print(f"ERROR InsertListenerInfo: {exc}")
         return 1
