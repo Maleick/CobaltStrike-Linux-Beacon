@@ -25,7 +25,7 @@ static uint64_t get_monotonic_ms() {
     return (uint64_t)ts.tv_sec * 1000 + (uint64_t)ts.tv_nsec / 1000000;
 }
 
-static uint32_t next_id() {
+__attribute__((unused)) static uint32_t next_id() {
     return (g_lsock_id++ % 67108864) + 67108864;
 }
 
@@ -337,7 +337,7 @@ void command_connect_socks(const uint8_t *buffer, int length, pivot_callback cal
     uint32_t id = ntohl(*(uint32_t*)buffer);
     uint16_t port = ntohs(*(uint16_t*)(buffer + 4));
     char *host = (char *)(buffer + 6);
-    int host_len = length - 6;
+    size_t host_len = (size_t)(length - 6);
 
     char host_z[1024];
     if (host_len >= sizeof(host_z)) host_len = sizeof(host_z) - 1;
