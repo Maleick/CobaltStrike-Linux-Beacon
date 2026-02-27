@@ -200,6 +200,16 @@ None - no external service configuration required.
 - Binary not yet executable without live Cobalt Strike Team Server and configured profile — that is Phase 7+ scope
 - No blockers for Phase 7
 
+## Self-Check: PASSED
+
+- FOUND: implant-macos/src/commands.c
+- FOUND: implant-macos/bin/beacon-macos
+- FOUND: implant-macos/generated/profile_config.h
+- FOUND: 06-03-SUMMARY.md
+- FOUND commit: 56cb84d (Task 1)
+- FOUND commit: edd8fb1 (Task 2)
+- FOUND commit: 72153df (metadata)
+
 ---
 *Phase: 06-macos-tree-scaffold-and-build-system*
 *Completed: 2026-02-27*
