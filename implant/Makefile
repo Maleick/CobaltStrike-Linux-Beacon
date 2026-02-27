@@ -90,8 +90,9 @@ $(OBJ_DIR)/%.o: %.c $(TRANSPORT_STAMP)
 
 # Clean build artifacts
 clean:
-	@echo "[CLEAN] Removing build artifacts"
-	@rm -rf $(OBJ_DIR) $(BIN_DIR)
+	@echo "[CLEAN] Removing build artifacts and generated headers"
+	@rm -rf $(OBJ_DIR) $(BIN_DIR) generated/*
+	@touch generated/.gitkeep
 
 # Debug build
 debug: CFLAGS += -g -DDEBUG

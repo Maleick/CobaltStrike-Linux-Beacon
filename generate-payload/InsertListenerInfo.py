@@ -37,12 +37,13 @@ def _write_selected_profile(profile: Dict[str, Any], output_path: pathlib.Path) 
     output_path.write_text(json.dumps(profile, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def insert_listener_info(target_server: str, target_port: int, https_value: int, profile_path: pathlib.Path, target: str) -> int:
+def insert_listener_info(target_server: str, target_port: int, https_value: int, profile_path: pathlib.Path, target: str, transport: str, ssl_ignore_verify: bool = False) -> int:
     profile = _load_profile(profile_path)
 
     profile["host"] = target_server
     profile["port"] = int(target_port)
     profile["use_https"] = bool(int(https_value))
+    profile["ssl_ignore_verify"] = ssl_ignore_verify
 
     # Dynamically set output paths based on target
     if target == "macos":
@@ -85,6 +86,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("profile_path", nargs="?", default=str(DEFAULT_PROFILE))
     parser.add_argument("--target", choices=["linux", "macos"], default="linux", help="Target platform (default: linux)")
     parser.add_argument("--transport", choices=["http", "tcp"], default="http", help="Transport type (default: http)")
+    parser.add_argument("--ssl-ignore-verify", action="store_true", help="Disable SSL certificate verification")
     return parser.parse_args(argv)
 
 
@@ -93,7 +95,7 @@ def main(argv: list[str]) -> int:
     profile_path = _resolve_path(args.profile_path)
 
     try:
-        return insert_listener_info(args.target_server, args.target_port, args.https_value, profile_path, args.target)
+        return insert_listener_info(args.target_server, args.target_port, args.https_value, profile_path, args.target, args.transport, args.ssl_ignore_verify)
     except (OSError, ValueError, subprocess.CalledProcessError) as exc:
         print(f"ERROR InsertListenerInfo: {exc}")
         return 1

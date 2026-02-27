@@ -19,8 +19,10 @@ REQUIRED_FIELDS = {
     "http_post_uri": str,
     "user_agent": str,
     "http_headers": dict,
+    "ssl_ignore_verify": bool,
 }
 
+OPTIONAL_FIELDS = {"ssl_ignore_verify"}
 
 def _load_json(path: pathlib.Path) -> Dict[str, Any]:
     try:
@@ -35,6 +37,8 @@ def _validate_required_fields(profile: Dict[str, Any]) -> List[str]:
     errors: List[str] = []
     for field, expected_type in REQUIRED_FIELDS.items():
         if field not in profile:
+            if field in OPTIONAL_FIELDS:
+                continue
             errors.append(f"missing required field '{field}'")
             continue
         value = profile[field]

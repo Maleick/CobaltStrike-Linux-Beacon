@@ -102,9 +102,18 @@ int http_get(const char *uri,
     char url[512];
     if (profile_get_use_https()) {
         snprintf(url, sizeof(url), "https://%s:%d%s", profile_get_server(), profile_get_port(), resolved_uri);
-        // The following two options are needed to support teamserver with untrusted (such as self-signed) certificates
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+
+#ifndef PROFILE_C2_VERIFY_SSL
+#define PROFILE_C2_VERIFY_SSL 1
+#endif
+
+        if (PROFILE_C2_VERIFY_SSL) {
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
+        } else {
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+        }
     } else {
         snprintf(url, sizeof(url), "http://%s:%d%s", profile_get_server(), profile_get_port(), resolved_uri);
     }
@@ -211,9 +220,18 @@ int http_post(const char *uri, const uint8_t *data, size_t data_len,
     char url[512];
     if (profile_get_use_https()) {
         snprintf(url, sizeof(url), "https://%s:%d%s?id=%s", profile_get_server(), profile_get_port(), resolved_uri, session_id);
-        // The following two options are needed to support teamserver with untrusted (such as self-signed) certificates
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+
+#ifndef PROFILE_C2_VERIFY_SSL
+#define PROFILE_C2_VERIFY_SSL 1
+#endif
+
+        if (PROFILE_C2_VERIFY_SSL) {
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
+        } else {
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+        }
     } else {
         snprintf(url, sizeof(url), "http://%s:%d%s?id=%s", profile_get_server(), profile_get_port(), resolved_uri, session_id);
     }

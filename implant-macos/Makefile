@@ -73,8 +73,9 @@ $(OBJ_DIR)/%.o: %.c
 
 # Clean build artifacts
 clean:
-	@echo "[CLEAN] Removing build artifacts"
-	@rm -rf $(OBJ_DIR) $(BIN_DIR)
+	@echo "[CLEAN] Removing build artifacts and generated headers"
+	@rm -rf $(OBJ_DIR) $(BIN_DIR) generated/*
+	@touch generated/.gitkeep
 
 # Debug build (includes DEBUG macro for DEBUG_PRINT output)
 debug: CFLAGS += -g -DDEBUG

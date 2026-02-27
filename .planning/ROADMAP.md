@@ -95,13 +95,13 @@ Plans:
   1. HTTPS transport verifies certificates by default and allows explicit operator override when required.
   2. Build pipeline no longer mutates tracked source files for key/listener injection.
   3. Temporary key/config artifacts are cleaned automatically after generation.
-**Status**: Not started (v1 stream paused)
-**Plans**: 3 plans
+**Status**: Complete (2026-02-27)
+**Plans**: 3/3 complete
 
 Plans:
-- [ ] 04-01: Add TLS verification controls with secure defaults
-- [ ] 04-02: Replace in-place source rewriting with generated build-time artifacts
-- [ ] 04-03: Add cleanup and safe temp-file handling for key/config material
+- [x] 04-01-PLAN.md — Add TLS verification controls with secure defaults in http.c; add "Verify SSL" option to Aggressor dialog.
+- [x] 04-02-PLAN.md — Replace InsertPublicKey.py/RemovePublicKey.py in-place modification with a build-time generated header (e.g., public_key.h) included by beacon.c.
+- [x] 04-03-PLAN.md — Implement automated cleanup of temporary artifacts in the generation script and Makefile to prevent leakage of key/config material.
 
 ---
 

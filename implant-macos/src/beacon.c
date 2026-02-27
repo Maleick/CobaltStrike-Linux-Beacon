@@ -32,10 +32,8 @@
 extern int g_sleep_time_ms;
 extern int g_jitter_percent;
 
-// Define the RSA public key here (declared as extern in config.h)
-unsigned char BEACON_PUBLIC_KEY[256] = "\x30";
-
-unsigned int BEACON_PUBLIC_KEY_LEN = 256;
+// Beacon RSA public key (build-time generated)
+#include "public_key.h"
 
 // Metadata flags
 #define METADATA_FLAG_AGENT_X64  2

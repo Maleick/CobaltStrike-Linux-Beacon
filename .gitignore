@@ -420,3 +420,11 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# CobaltStrike-Linux-Beacon specific
+implant/generated/*
+!implant/generated/.gitkeep
+implant-macos/generated/*
+!implant-macos/generated/.gitkeep
+generate-payload/publickey.txt
+selected_profile.json

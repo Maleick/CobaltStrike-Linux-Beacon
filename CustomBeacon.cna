@@ -20,7 +20,7 @@ sub genBeaconMenu {
 
 	# Create a dialog. Use &dialog_show to show it. Args in Order: 1. Title of the dialog; 2. A %dictionary mapping row names to default values; 3.A callback function that gets called when the user presses a &dbutton_action button.
 	# $1 is a reference to the dialog. $2 is the button name. $3 is a dictionary that maps each row's name to its value.
-	$dialog = dialog("Custom Beacon Generator", %(listener => "Select Listener: ", Beacon_name => "Beacon_x64", Profile_path => "../profiles/http/default-profile.json", platform => "Linux"), &genPayload); 
+	$dialog = dialog("Custom Beacon Generator", %(listener => "Select Listener: ", Beacon_name => "Beacon_x64", Profile_path => "../profiles/http/default-profile.json", platform => "Linux", verify_ssl => "true"), &genPayload); 
 	
 	# Adds a description to a &dialog
 	dialog_description($dialog, "Creates a custom Beacon implant\n- Supports Linux x64 and macOS ARM64");
@@ -33,6 +33,8 @@ sub genBeaconMenu {
 	drow_text($dialog, "Profile_path", "Profile Path: ");
 	
 	drow_combobox($dialog, "platform", "Platform: ", @("Linux", "macOS"));
+
+	drow_checkbox($dialog, "verify_ssl", "Verify SSL: ", "Verify C2 SSL Certificates");
 
 	# Adds an action button to a &dialog. When this button is pressed, the dialog closes and its callback is called.
 	dbutton_action($dialog, "Generate");
@@ -121,9 +123,14 @@ sub genPayload {
 	$TargetServer = listener_info($ListenerName, "host");
 	$TargetPort = listener_info($ListenerName, "port");
 	
+	$SSLFlag = "";
+	if ($3['verify_ssl'] eq "false") {
+		$SSLFlag = " --ssl-ignore-verify";
+	}
+
 	# InsertListenerInfo.py runs validate_profile.py + render_profile_header.py
 	# so generation fails fast before make if profile config is invalid.
-	$command = "python3 InsertListenerInfo.py " . $TargetServer . " " . $TargetPort . " " . $HTTPSvalue . " " . $ProfilePath . $TargetFlag . " --transport " . $transport;
+	$command = "python3 InsertListenerInfo.py " . $TargetServer . " " . $TargetPort . " " . $HTTPSvalue . " " . $ProfilePath . $TargetFlag . " --transport " . $transport . $SSLFlag;
 	println($command);
 	$process = exec($command, $null, $GeneratePayloadDirectory);
 	@data = readAll($process);
@@ -143,9 +150,10 @@ sub genPayload {
     }
 	
 	#
-	# Insert public key into beacon.c
+	# Generate public key header (non-mutating)
 	#
-	$command = "python3 InsertPublicKey.py" . $TargetFlag;
+	$GeneratedKeyHeader = $TargetImplantDir . "/generated/public_key.h";
+	$command = "python3 GeneratePublicKeyHeader.py " . $publickeylocation . " " . $GeneratedKeyHeader;
 	println($command);
 	$process = exec($command, $null, $GeneratePayloadDirectory);
 	@data = readAll($process);
@@ -174,18 +182,6 @@ sub genPayload {
         println($line);
     }
     closef($process);
-
-	#
-	# Remove public key from beacon.c after compiling
-	#
-	$command = "python3 RemovePublicKey.py" . $TargetFlag;
-	println($command);
-	$process = exec($command, $null, $GeneratePayloadDirectory);
-	@data = readAll($process);
-	foreach $line (@data) {
-        println($line);
-    }
-	closef($process);
 
 	#
 	# Yay

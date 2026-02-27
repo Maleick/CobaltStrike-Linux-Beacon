@@ -34,6 +34,11 @@ def _render_header(profile: dict) -> str:
     header_lines.append(f"#define PROFILE_C2_SERVER \"{_c_escape(profile['host'])}\"")
     header_lines.append(f"#define PROFILE_C2_PORT {int(profile['port'])}")
     header_lines.append(f"#define PROFILE_C2_USE_HTTPS {1 if profile['use_https'] else 0}")
+    
+    # SSL Verification: Default to 1 (verify) unless ssl_ignore_verify is explicitly True
+    verify_ssl = 0 if profile.get("ssl_ignore_verify") is True else 1
+    header_lines.append(f"#define PROFILE_C2_VERIFY_SSL {verify_ssl}")
+
     header_lines.append(f"#define PROFILE_HTTP_GET_URI \"{_c_escape(profile['http_get_uri'])}\"")
     header_lines.append(f"#define PROFILE_HTTP_POST_URI \"{_c_escape(profile['http_post_uri'])}\"")
     header_lines.append(f"#define PROFILE_USER_AGENT \"{_c_escape(profile['user_agent'])}\"")
