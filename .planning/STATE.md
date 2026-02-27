@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: macOS ARM64 Beacon
 status: in_progress
-stopped_at: Completed 06-02-PLAN.md — beacon.c getprogname()+uint32_t fix and main.c version string
-last_updated: "2026-02-27T02:39:35Z"
+stopped_at: Completed 06-03-PLAN.md — commands.c macOS port and full ARM64 build
+last_updated: "2026-02-27T02:47:00Z"
 progress:
   total_phases: 4
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 10
-  completed_plans: 2
+  completed_plans: 3
 ---
 
 # Project State
@@ -19,16 +19,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Operators can deploy a Cobalt Strike-compatible beacon on Linux x64 and macOS ARM64 hosts, with a safe and extensible generation workflow for each platform.
-**Current focus:** v2.0 macOS ARM64 Beacon — Phase 6: macOS Tree Scaffold and Build System
+**Current focus:** v2.0 macOS ARM64 Beacon — Phase 6 complete, ready for Phase 7
 
 ## Current Position
 
-Phase: 6 of 9 (macOS Tree Scaffold and Build System)
-Plan: 2 of 3 in current phase
-Status: In progress — plan 06-02 complete
-Last activity: 2026-02-27 — beacon.c and main.c macOS rewrites complete
+Phase: 6 of 9 (macOS Tree Scaffold and Build System) — COMPLETE
+Plan: 3 of 3 in phase 6 — phase complete
+Status: Phase 6 complete — Mach-O ARM64 binary produced, all criteria verified
+Last activity: 2026-02-27 — commands.c ported, binary built and signed
 
-Progress: [##░░░░░░░░] 20%
+Progress: [###░░░░░░░] 30%
 
 ## v1.0 Linux Stream (Paused)
 
@@ -47,7 +47,7 @@ Resume with: `/gsd:resume-work` (see `.planning/phases/03-reverse-tcp-transport/
 
 | Phase | Status | Plans |
 |-------|--------|-------|
-| 6. macOS Tree Scaffold and Build System | ◑ In progress | 2/3 |
+| 6. macOS Tree Scaffold and Build System | ✓ Complete | 3/3 |
 | 7. macOS Beacon Core Rewrites | ○ Not started | 0/3 |
 | 8. macOS Command Parity | ○ Not started | 0/3 |
 | 9. macOS Stabilization | ○ Not started | 0/1 |
@@ -55,14 +55,15 @@ Resume with: `/gsd:resume-work` (see `.planning/phases/03-reverse-tcp-transport/
 ## Performance Metrics
 
 **Velocity (v2.0 stream):**
-- Total plans completed: 2
+- Total plans completed: 3
 - Average duration: 4 min
-- Total execution time: 0.1 hours
+- Total execution time: 0.2 hours
 
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
 | 06-01 | 5 min | 2 | 16 |
 | 06-02 | 3 min | 2 | 2 |
+| 06-03 | 4 min | 2 | 3 |
 
 *Updated after each plan completion*
 
@@ -87,6 +88,10 @@ Recent decisions affecting current work:
 - [06-02] getprogname() in stdlib.h (already included) — no new headers needed for MAC-06 fix
 - [06-02] uint32_t + htonl() for all three 4-byte var4/5/6 fields — Linux version incorrectly used htons() for var5 and var6
 - [06-02] No #ifdef __APPLE__ guards in implant-macos/ tree — macOS-only by design
+- [06-03] Zero-warning build enforced: fixed 6 Clang -Wall -Wextra warnings across commands.c and pivot.c
+- [06-03] next_id() in pivot.c preserved with __attribute__((unused)) — not deleted, reserved for future socket ID use
+- [06-03] Phase 6 build stub pattern: generated/profile_config.h is empty for Phase 6; replaced by InsertListenerInfo.py in Phase 7
+- [06-03] pclose() return value discarded via (void) cast — shell command exit status not needed in this flow
 
 ### Pending Todos
 
@@ -95,11 +100,11 @@ None.
 ### Blockers/Concerns (Resolved)
 
 - ~~libcurl + OpenSSL link paths differ on macOS (Homebrew vs System frameworks)~~ — RESOLVED in 06-01 via dynamic brew --prefix path resolution
-- ELFLoader is Linux ELF-specific — macOS Mach-O BOF execution is out of scope for v2.0
-- macOS ARM64 code signing constraints — Phase 9 stabilization must address for purple-team deployment
+- ~~ELFLoader is Linux ELF-specific~~ — RESOLVED in 06-03 via removal from commands.c
+- macOS ARM64 code signing constraints — Phase 9 stabilization must address for purple-team deployment (ad-hoc signing is sufficient for Phase 6 build verification)
 
 ## Session Continuity
 
-**Last session:** 2026-02-27T02:39:35Z
-**Stopped at:** Completed 06-02-PLAN.md
+**Last session:** 2026-02-27T02:47:00Z
+**Stopped at:** Completed 06-03-PLAN.md — Phase 6 complete
 **Resume file:** .planning/STATE.md
