@@ -1,0 +1,15 @@
+{
+  "host": "127.0.0.1",
+  "http_get_uri": "/en_US/all.js",
+  "http_headers": {
+    "Accept": "*/*",
+    "Cache-Control": "no-cache",
+    "Connection": "Keep-Alive"
+  },
+  "http_post_uri": "/submit.php",
+  "port": 443,
+  "profile_id": "default-http-v1",
+  "schema_version": "1.0",
+  "use_https": true,
+  "user_agent": "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)"
+}

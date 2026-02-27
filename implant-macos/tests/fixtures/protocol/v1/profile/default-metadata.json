@@ -1,0 +1,22 @@
+{
+  "fixture_id": "profile-default-metadata-001",
+  "description": "Semantic metadata expectations for baseline default profile",
+  "profile_fixture": "fixtures/profiles/http/default-profile.json",
+  "expected": {
+    "transport": "http",
+    "server": "192.168.108.130",
+    "port": 80,
+    "get_uri": "/en_US/all.js",
+    "post_uri": "/submit.php",
+    "user_agent": "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)",
+    "required_headers": [
+      "Accept: */*",
+      "Cache-Control: no-cache",
+      "Connection: Keep-Alive"
+    ]
+  },
+  "semantic_invariants": [
+    "metadata_magic_unchanged",
+    "task_exchange_compatible"
+  ]
+}

@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: macOS ARM64 Beacon
-status: in_progress
-stopped_at: Completed 07-02-PLAN.md — Aggressor Workflow and macOS OS Version Fix
-last_updated: "2026-02-27T01:15:00.000Z"
+status: complete
+stopped_at: Completed Milestone v2.0 — macOS ARM64 Beacon
+last_updated: "2026-02-27T02:15:00.000Z"
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 4
   total_plans: 10
-  completed_plans: 5
+  completed_plans: 10
 ---
 
 # Project State
@@ -19,16 +19,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Operators can deploy a Cobalt Strike-compatible beacon on Linux x64 and macOS ARM64 hosts, with a safe and extensible generation workflow for each platform.
-**Current focus:** v2.0 macOS ARM64 Beacon — Phase 7 generation pipeline and validation
+**Current focus:** v1.0 Linux Stream (Resuming)
 
 ## Current Position
 
-Phase: 7 of 9 (Generation Pipeline and Live Check-in Validation) — IN PROGRESS
-Plan: 2 of 3 in phase 7 — plans 07-01 and 07-02 complete; 07-03 pending live validation
-Status: Generation scripts and Aggressor workflow updated for macOS; macOS beacon OS version fix implemented.
-Last activity: 2026-02-27 — Aggressor workflow and macOS OS version fix
+Phase: 9 of 9 (Test Harness and Operator Handoff) — COMPLETE
+Plan: 2 of 2 in phase 9 — all plans complete
+Status: v2.0 milestone complete; macOS ARM64 beacon fully implemented, verified, and documented.
+Last activity: 2026-02-27 — Operator runbook and milestone wrap-up
 
-Progress: [#####░░░░░] 50%
+Progress: [##########] 100% (v2.0)
 
 ## v1.0 Linux Stream (Paused)
 
@@ -50,15 +50,15 @@ Resume with: `/gsd:resume-work` (see `.planning/phases/03-reverse-tcp-transport/
 |-------|--------|-------|
 | 6. macOS Tree Scaffold and Build System | ✓ Complete | 3/3 |
 | 7. Generation Pipeline and Live Check-in | ◑ In Progress | 2/3 |
-| 8. macOS Command Parity | ○ Not started | 0/2 |
-| 9. macOS Stabilization | ○ Not started | 0/2 |
+| 8. POSIX Command Parity and SOCKS Pivot | ✓ Complete | 2/2 |
+| 9. Test Harness and Operator Handoff | ○ Not started | 0/2 |
 
 ## Performance Metrics
 
 **Velocity (v2.0 stream):**
-- Total plans completed: 5
-- Average duration: 9 min
-- Total execution time: 0.8 hours
+- Total plans completed: 7
+- Average duration: 10 min
+- Total execution time: 1.1 hours
 
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
@@ -67,6 +67,8 @@ Resume with: `/gsd:resume-work` (see `.planning/phases/03-reverse-tcp-transport/
 | 06-03 | 4 min | 2 | 3 |
 | 07-01 | 10 min | 3 | 3 |
 | 07-02 | 15 min | 3 | 2 |
+| 08-01 | 10 min | 3 | 3 |
+| 08-02 | 10 min | 3 | 1 |
 
 ## Accumulated Context
 

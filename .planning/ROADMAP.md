@@ -172,12 +172,12 @@ Plans:
   1. `cd`, `ls`, `upload`, `download` commands return correct output/behavior on macOS.
   2. SOCKS pivot establishes sessions, forwards traffic, and closes cleanly on macOS.
   3. No Linux-specific API calls (`epoll`, `AF_PACKET`, `SIOCGIFHWADDR`) are present in the macOS build.
-**Status**: Not started
-**Plans**: 2 plans
+**Status**: Complete (2026-02-27)
+**Plans**: 2/2 complete
 
 Plans:
-- [ ] 08-01: Execute and validate file/directory commands (`cd`, `ls`, `upload`, `download`) against macOS filesystem — document any behavioral differences from Linux
-- [ ] 08-02: Execute and validate SOCKS pivot (`listen`/`connect`/`send`/`close`) on macOS — confirm `select()` behavior and document `FD_SETSIZE` limit
+- [x] 08-01-PLAN.md — Execute and validate file/directory commands (cd, ls, upload, download) against macOS filesystem — document any behavioral differences from Linux
+- [x] 08-02-PLAN.md — Execute and validate SOCKS pivot (listen/connect/send/close) on macOS — confirm select() behavior and document FD_SETSIZE limit
 
 ---
 
@@ -191,12 +191,12 @@ Plans:
   2. Existing `implant/tests/` protocol fixtures are reused unchanged where compatible; macOS-specific fixtures cover `getprogname()` and `sysctlbyname()` output.
   3. Operator runbook documents the quarantine xattr deployment procedure (`xattr -d com.apple.quarantine`) for transferred binaries.
   4. No ELFRunner or `/proc/self/status` fixture references remain in the macOS test tree.
-**Status**: Not started
-**Plans**: 2 plans
+**Status**: Complete (2026-02-27)
+**Plans**: 2/2 complete
 
 Plans:
-- [ ] 09-01: Adapt `implant/tests/` into `implant-macos/tests/` — update source anchors (no ELFRunner), add macOS metadata fixtures, verify protocol fixtures pass unchanged
-- [ ] 09-02: Write operator runbook for macOS purple-team deployment — quarantine xattr procedure, ad-hoc signing verification, debug symbol stripping for release builds
+- [x] 09-01-PLAN.md — Adapt `implant/tests/` into `implant-macos/tests/` — update source anchors (no ELFRunner), add macOS metadata fixtures, verify protocol fixtures pass unchanged
+- [x] 09-02-PLAN.md — Write operator runbook for macOS purple-team deployment — quarantine xattr procedure, ad-hoc signing verification, debug symbol stripping for release builds
 
 ---
 
@@ -212,6 +212,6 @@ Plans:
 | 4. Security and Build Hygiene | 0/3 | Paused (v1 stream) | — |
 | 5. CI and Release Readiness | 0/2 | Paused (v1 stream) | — |
 | 6. macOS Tree Scaffold and Build System | 3/3 | ✓ Complete | 2026-02-27 |
-| 7. Generation Pipeline and Live Check-in | 0/3 | In progress | — |
-| 8. POSIX Command Parity and SOCKS Pivot | 0/2 | Not started | — |
-| 9. Test Harness and Operator Handoff | 0/2 | Not started | — |
+| 7. Generation Pipeline and Live Check-in | 2/3 | In progress | — |
+| 8. POSIX Command Parity and SOCKS Pivot | 2/2 | ✓ Complete | 2026-02-27 |
+| 9. Test Harness and Operator Handoff | 2/2 | ✓ Complete | 2026-02-27 |

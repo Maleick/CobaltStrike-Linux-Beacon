@@ -1,0 +1,19 @@
+{
+  "fixture_id": "meta-default-http-001",
+  "description": "Canonical semantic metadata expectations for the default HTTP profile",
+  "profile": {
+    "transport": "http",
+    "server": "192.168.108.130",
+    "port": 80,
+    "get_uri": "/en_US/all.js",
+    "post_uri": "/submit.php",
+    "user_agent": "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)"
+  },
+  "semantic_expectations": {
+    "magic": "0x0000BEEF",
+    "session_key_length": 16,
+    "metadata_flags": ["agent_arch", "target_arch"],
+    "supports_os_tuple": true,
+    "contains_process_identity": true
+  }
+}

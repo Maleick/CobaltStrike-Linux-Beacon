@@ -92,6 +92,9 @@ static int generic_listen(uint32_t bindto, uint16_t port, int backlog) {
 }
 
 static void pivot_poll_checker(pivot_callback callback) {
+    /* macOS: select() is limited to FD_SETSIZE (default 1024) file descriptors.
+     * This is acceptable for a single beacon's SOCKS pivot load in v2.0.
+     * Future scaling would require poll() or kqueue() for more than 1024 concurrent socks. */
     fd_set fds_read, fds_write, fds_error;
     struct timeval tv = {0, 10 * 1000}; // 10ms timeout
     int max_fd = 0;

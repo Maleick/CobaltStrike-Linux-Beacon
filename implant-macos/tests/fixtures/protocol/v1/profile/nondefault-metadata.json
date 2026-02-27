@@ -1,0 +1,23 @@
+{
+  "fixture_id": "profile-nondefault-metadata-001",
+  "description": "Semantic metadata expectations for non-default HTTPS profile",
+  "profile_fixture": "fixtures/profiles/http/nondefault-profile.json",
+  "expected": {
+    "transport": "https",
+    "server": "192.168.108.130",
+    "port": 443,
+    "get_uri": "/cdn/checkin.js",
+    "post_uri": "/cdn/submit.php",
+    "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36",
+    "required_headers": [
+      "Accept: */*",
+      "Cache-Control: no-cache",
+      "Connection: Keep-Alive",
+      "Pragma: no-cache"
+    ]
+  },
+  "semantic_invariants": [
+    "metadata_magic_unchanged",
+    "task_exchange_compatible"
+  ]
+}

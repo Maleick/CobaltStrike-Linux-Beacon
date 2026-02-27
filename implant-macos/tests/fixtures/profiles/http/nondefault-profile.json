@@ -1,0 +1,16 @@
+{
+  "profile_id": "nondefault-https-v1",
+  "schema_version": "1.0",
+  "host": "192.168.108.130",
+  "port": 443,
+  "use_https": true,
+  "http_get_uri": "/cdn/checkin.js",
+  "http_post_uri": "/cdn/submit.php",
+  "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36",
+  "http_headers": {
+    "Accept": "*/*",
+    "Cache-Control": "no-cache",
+    "Connection": "Keep-Alive",
+    "Pragma": "no-cache"
+  }
+}
