@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: Linux x64 Evolution
-status: in_progress
-stopped_at: Completed 04-03-PLAN.md — Artifact cleanup and gitignore refinement
-last_updated: "2026-02-27T04:30:00.000Z"
+status: complete
+stopped_at: Completed Milestone v1.0 — Linux x64 Evolution
+last_updated: "2026-02-27T05:00:00.000Z"
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 14
-  completed_plans: 12
+  completed_plans: 14
 ---
 
 # Project State
@@ -19,16 +19,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Operators can deploy a Cobalt Strike-compatible beacon on Linux x64 and macOS ARM64 hosts, with a safe and extensible generation workflow for each platform.
-**Current focus:** v1.0 Linux Stream — Phase 5 CI and Release Readiness
+**Current focus:** Project Maintenance and v2.0 Live Validation
 
 ## Current Position
 
-Phase: 4 of 5 (Security and Build Hygiene) — COMPLETE
-Plan: 3 of 3 in phase 4 — all plans complete
-Status: SSL verification configurable; public key source-mutation eliminated via header generation; cleanup hardened.
-Last activity: 2026-02-27 — End-to-end generation and cleanup verification
+Phase: 5 of 5 (CI and Release Readiness) — COMPLETE
+Plan: 2 of 2 in phase 5 — all plans complete
+Status: v1.0 milestone complete; Linux beacon evolved with transport coverage, safety, and automated CI.
+Last activity: 2026-02-27 — Milestone v1.0 closure and verification report
 
-Progress: [########░░] 80%
+Progress: [##########] 100% (v1.0)
 
 ## v1.0 Linux Stream Progress
 
@@ -38,9 +38,9 @@ Progress: [########░░] 80%
 | 2. HTTP/S Profile Abstraction | ✓ Complete | 3/3 |
 | 3. Reverse TCP Transport | ✓ Complete | 3/3 |
 | 4. Security and Build Hygiene | ✓ Complete | 3/3 |
-| 5. CI and Release Readiness | ○ Not started | 0/2 |
+| 5. CI and Release Readiness | ✓ Complete | 2/2 |
 
-## v2.0 macOS Stream (Paused)
+## v2.0 macOS Stream Progress
 
 Milestone v2.0 complete (2026-02-27). 
 macOS beacon is functional and documented. 
@@ -56,9 +56,9 @@ Pending Phase 7 live validation feedback from operator.
 ## Performance Metrics (v1.0 stream)
 
 **Velocity:**
-- Total plans completed: 12
+- Total plans completed: 14
 - Average duration: 15 min
-- Total execution time: 3.0 hours
+- Total execution time: 3.5 hours
 
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
@@ -74,6 +74,8 @@ Pending Phase 7 live validation feedback from operator.
 | 04-01 | 20 min | 3 | 6 |
 | 04-02 | 15 min | 3 | 4 |
 | 04-03 | 10 min | 3 | 3 |
+| 05-01 | 10 min | 2 | 1 |
+| 05-02 | 15 min | 3 | 3 |
 
 ## v1.0 Linux Stream (Paused)
 

@@ -18,9 +18,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Baseline Validation Harness** - Establish repeatable protocol/parser regression safety. (completed 2026-02-25)
 - [x] **Phase 2: HTTP/S Profile Abstraction** - Externalize profile configuration while preserving compatibility. (completed 2026-02-25)
-- [ ] **Phase 3: Reverse TCP Transport Mode** - Add TCP beacon transport and generation-mode selection. *(paused)*
-- [ ] **Phase 4: Security and Build Hygiene** - Harden TLS defaults and eliminate tracked-source mutation workflow. *(paused)*
-- [ ] **Phase 5: CI and Release Readiness** - Automate build/test gating and milestone acceptance checks. *(paused)*
+- [x] **Phase 3: Reverse TCP Transport Mode** - Add TCP beacon transport and generation-mode selection. (completed 2026-02-27)
+- [x] **Phase 4: Security and Build Hygiene** - Harden TLS defaults and eliminate tracked-source mutation workflow. (completed 2026-02-27)
+- [x] **Phase 5: CI and Release Readiness** - Automate build/test gating and milestone acceptance checks. (completed 2026-02-27)
 
 ### v2.0 macOS ARM64 Stream (Phases 6–9)
 
@@ -113,12 +113,12 @@ Plans:
   1. CI pipeline builds implant and executes regression suite on Linux for each change.
   2. Failing tests/builds block merge-ready status until resolved.
   3. Release checklist verifies all mapped v1 requirements are covered by completed phase outputs.
-**Status**: Not started (v1 stream paused)
-**Plans**: 2 plans
+**Status**: Complete (2026-02-27)
+**Plans**: 2/2 complete
 
 Plans:
-- [ ] 05-01: Add CI workflow for build and regression suite execution
-- [ ] 05-02: Add release-readiness checks tied to roadmap requirement coverage
+- [x] 05-01-PLAN.md — Add CI workflow for build and regression suite execution (GitHub Actions).
+- [x] 05-02-PLAN.md — Add release-readiness checks tied to roadmap requirement coverage; finalize milestone v1.0.
 
 ---
 

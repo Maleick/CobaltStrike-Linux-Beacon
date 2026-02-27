@@ -1,0 +1,33 @@
+name: Linux Beacon CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libssl-dev libcurl4-openssl-dev python3 python3-yaml
+
+    - name: Build HTTP Transport
+      run: |
+        make -C implant clean
+        make -C implant TRANSPORT=http
+
+    - name: Build TCP Transport
+      run: |
+        make -C implant clean
+        make -C implant TRANSPORT=tcp
+
+    - name: Run Quick Regression Suite
+      run: |
+        make -C implant test-quick
