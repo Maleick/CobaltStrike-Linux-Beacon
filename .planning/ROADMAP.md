@@ -77,13 +77,13 @@ Plans:
   1. Operator can generate a TCP transport payload from the same generation workflow used for HTTP/S.
   2. TCP-mode beacon successfully connects, receives tasks, and returns callbacks through Team Server.
   3. Network interruptions trigger bounded reconnect/backoff behavior rather than process termination.
-**Status**: Not started (v1 stream paused — resume with `/gsd:resume-work`)
-**Plans**: 3 plans
+**Status**: Complete (2026-02-27)
+**Plans**: 3/3 complete
 
 Plans:
-- [ ] 03-01-PLAN.md — C transport layer: transport.h interface, tcp.c implementation, http.c refactor, Makefile TRANSPORT variable
-- [ ] 03-02-PLAN.md — Generation layer: CNA drow_listener + transport detection, InsertListenerInfo.py transport_mode migration
-- [ ] 03-03-PLAN.md — Reconnect/backoff in main.c and transport regression suite
+- [x] 03-01-PLAN.md — C transport layer: transport.h interface, tcp.c implementation, http.c refactor, Makefile TRANSPORT variable
+- [x] 03-02-PLAN.md — Generation layer: CNA drow_listener + transport detection, InsertListenerInfo.py transport_mode migration
+- [x] 03-03-PLAN.md — Reconnect/backoff in main.c and transport regression suite
 
 ---
 

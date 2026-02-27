@@ -84,6 +84,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("https_value", type=int, choices=[0, 1])
     parser.add_argument("profile_path", nargs="?", default=str(DEFAULT_PROFILE))
     parser.add_argument("--target", choices=["linux", "macos"], default="linux", help="Target platform (default: linux)")
+    parser.add_argument("--transport", choices=["http", "tcp"], default="http", help="Transport type (default: http)")
     return parser.parse_args(argv)
 
 

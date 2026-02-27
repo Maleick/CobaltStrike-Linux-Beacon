@@ -8,7 +8,15 @@ CFLAGS = -Wall -Wextra -O2 \
          -I./generated \
          -I./elfloader/elfloader-headers
 
-LDFLAGS = -lssl -lcrypto -lcurl
+LDFLAGS = -lssl -lcrypto
+
+# Homebrew path resolution for macOS builds
+ifeq ($(shell uname),Darwin)
+    OPENSSL_PREFIX = $(shell brew --prefix openssl@3)
+    CURL_PREFIX = $(shell brew --prefix curl)
+    CFLAGS += -I$(OPENSSL_PREFIX)/include -I$(CURL_PREFIX)/include
+    LDFLAGS += -L$(OPENSSL_PREFIX)/lib -L$(CURL_PREFIX)/lib
+endif
 
 # Directories
 SRC_DIR            = src
@@ -18,6 +26,19 @@ ELFLOADER_INC_DIR  = elfloader/elfloader-headers
 OBJ_DIR            = obj
 BIN_DIR            = bin
 
+# Transport selection
+TRANSPORT ?= http
+ifeq ($(TRANSPORT),http)
+    TRANSPORT_SRC = $(SRC_DIR)/http.c
+    CFLAGS += -DTRANSPORT_HTTP
+    LDFLAGS += -lcurl
+else ifeq ($(TRANSPORT),tcp)
+    TRANSPORT_SRC = $(SRC_DIR)/tcp.c
+    CFLAGS += -DTRANSPORT_TCP
+else
+    $(error Invalid TRANSPORT type: $(TRANSPORT). Use 'http' or 'tcp')
+endif
+
 # Target binary
 TARGET = $(BIN_DIR)/$(OUTPUT)
 MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
@@ -25,14 +46,24 @@ TEST_DIR := $(MAKEFILE_DIR)tests
 
 # Source files
 SOURCES = \
-    $(wildcard $(SRC_DIR)/*.c) \
+    $(SRC_DIR)/beacon.c \
+    $(SRC_DIR)/commands.c \
+    $(SRC_DIR)/crypto.c \
+    $(SRC_DIR)/files.c \
+    $(SRC_DIR)/main.c \
+    $(SRC_DIR)/pivot.c \
+    $(SRC_DIR)/profile.c \
+    $(TRANSPORT_SRC) \
     $(wildcard $(ELFLOADER_SRC_DIR)/*.c)
 
 # Object files (mirror source tree in obj/)
 OBJECTS = $(patsubst %.c,$(OBJ_DIR)/%.o,$(SOURCES))
 
+# Transport stamp to force recompilation when TRANSPORT changes
+TRANSPORT_STAMP = $(OBJ_DIR)/.transport_$(TRANSPORT)
+
 # Default target
-all: directories $(TARGET)
+all: directories $(TRANSPORT_STAMP) $(TARGET)
 
 # Create necessary directories
 directories:
@@ -41,6 +72,11 @@ directories:
 	@mkdir -p $(OBJ_DIR)/$(ELFLOADER_SRC_DIR)
 	@mkdir -p generated
 
+# Rule for transport stamp
+$(TRANSPORT_STAMP):
+	@rm -f $(OBJ_DIR)/.transport_*
+	@touch $@
+
 # Link the final binary
 $(TARGET): $(OBJECTS)
 	@echo "[LD] Linking $@"
@@ -48,7 +84,7 @@ $(TARGET): $(OBJECTS)
 	@echo "[+] Build complete: $@"
 
 # Compile source files (works for all source dirs)
-$(OBJ_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: %.c $(TRANSPORT_STAMP)
 	@echo "[CC] Compiling $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
 

