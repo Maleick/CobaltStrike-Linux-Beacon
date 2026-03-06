@@ -145,7 +145,10 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None.
+- Complete `.planning/phases/07-generation-and-validation/07-03-PLAN.md` live validation:
+  - Generate and run a macOS payload from the Aggressor workflow.
+  - Confirm check-in metadata (host/user/process/OS version/arch) in the Team Server.
+  - Validate `sleep`, `pwd`, and `shell id` command execution and confirm shell offset.
 
 ### Blockers/Concerns (Resolved)
 

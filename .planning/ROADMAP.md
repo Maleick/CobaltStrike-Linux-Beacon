@@ -26,8 +26,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 6: macOS Tree Scaffold and Build System** - Compilable Mach-O ARM64 binary with correct protocol baseline. (completed 2026-02-27)
 - [ ] **Phase 7: Generation Pipeline and Live Check-in Validation** - Operator Aggressor workflow + confirmed live Team Server check-in.
-- [ ] **Phase 8: POSIX Command Parity and SOCKS Pivot** - All in-scope POSIX commands and pivot validated on macOS.
-- [ ] **Phase 9: Test Harness and Operator Handoff** - Fixture-backed regression coverage and purple-team deployment docs.
+- [x] **Phase 8: POSIX Command Parity and SOCKS Pivot** - All in-scope POSIX commands and pivot validated on macOS. (completed 2026-02-27)
+- [x] **Phase 9: Test Harness and Operator Handoff** - Fixture-backed regression coverage and purple-team deployment docs. (completed 2026-02-27)
 
 ---
 
